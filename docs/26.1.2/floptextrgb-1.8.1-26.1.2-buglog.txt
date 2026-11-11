@@ -1,0 +1,12 @@
+# FlopText RGB 1.8.1 for Minecraft 26.1.2 — BugLog
+Status: In Testing; the prior 1.8.0 picker was owner-tested successfully.
+
+## Change in 1.8.1
+- Added hover feedback for the selected color swatch: `Click to edit`.
+- Tooltip uses the existing hitbox (28x18), appears only over the swatch in the main editor, is rendered after the main UI, and clamps to the screen edges.
+- Tooltip is not drawn while a modal is open, avoiding overlap with the HSV picker or Custom Output popup.
+
+## Risks / validation still needed
+- Static checks cannot prove live mouse/render behavior. Verify tooltip appears only while hovering the swatch and that clicking still opens the HSV color picker.
+- Test at the user's normal GUI scale and at high GUI scale if practical.
+- No changes to other Minecraft versions or the website.

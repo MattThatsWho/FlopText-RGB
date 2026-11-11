@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "floptext_rgb",
+  "version": "${version}",
+  "name": "FlopText RGB",
+  "description": "Client-side multi-stop RGB text gradient creator for Minecraft 26.1.2.",
+  "authors": [
+    "MattThatsWho"
+  ],
+  "license": "MIT",
+  "contact": {
+    "homepage": "https://mattsmods.vercel.app/floptextrgb",
+    "sources": "https://github.com/MattThatsWho/floptextrgb",
+    "issues": "https://mattsmods.vercel.app/floptextrgb/report-bug"
+  },
+  "icon": "assets/floptext_rgb/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.yourname.floptext_rgb.FlopTextRGBMod"
+    ],
+    "modmenu": [
+      "com.yourname.floptext_rgb.integration.ModMenuIntegration"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "26.1.2",
+    "java": ">=25",
+    "fabric-api": "*",
+    "cloth-config": ">=26.1.154"
+  },
+  "recommends": {
+    "modmenu": ">=18.0.0-alpha.8"
+  }
+}

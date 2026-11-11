@@ -1,0 +1,44 @@
+---
+## floptext-1.7.0-26.1.2 - ChangeLog
+~~~
+Type: Beta
+Reason: In Testing
+~~~
+
+### Fixed:
+- Fixed missing gradient previews by passing opaque ARGB render colors to Minecraft 26.1.2's GUI text renderer. Component style colors remain 24-bit RGB; the explicit draw color now uses an opaque alpha channel.
+- Fixed the PC file picker on Windows configurations where Java reports AWT as headless. System-picker mode now launches the Windows Forms Open/Save dialog from a separate PowerShell process, independently of Java's AWT state.
+- Restored the original single, clickable `Format: <current format>` cycling selector. It updates through the output modes (with compact labels at high GUI scales); it is no longer dulled out or duplicated. The separate original `Custom Output` button is always dulled and disabled, regardless of the selected format, because its popup is being deferred for redesign.
+- Corrected main-editor and Favorites preview layout by measuring each styled character, including bold advance, rather than using the plain glyph width. The Library page preview renderer was left unchanged.
+- Follow-up requested correction: `Format: Custom` remains a selectable value in the cycling Format button, but the separate `Custom Output` button stays disabled/dulled for every format.
+- Updated regression checks for the dynamic Format selector, the always-disabled Custom Output button, and bold glyph spacing. The PC picker and pinned Library heading implementations were left untouched in this pass.
+
+### Updated:
+- The Library's fixed section heading now switches between `Folders` and `Favorites` as Favorites reaches the top of the scrolling viewport, and switches back while scrolling upward.
+- Preserved the previously confirmed improvements: stop crossover while dragging, improved Add Folder dialog height, and unified scrolling for Library cards, text, dividers, and action buttons.
+- Preserved the original v1.7.0 color-stop defaults (`#4A90E2` at 0%, `#FF4A9A` at 100%), pixel icons, charcoal panels, format-generation logic, import/export data schema, and all 431 Community Presets across 16 categories.
+- The Windows picker filters JSON and legacy ZIP workflows and does not silently switch to the in-game browser when PC picker mode is selected. If the Windows native dialog fails, it reports a specific picker error.
+
+### Folder Page Restoration:
+- Rebuilt the folder page around the original 1.21.11 layout: left-aligned folder title and preset count, divider, a dedicated Presets panel, and a centered footer Back button.
+- Restored the original responsive two/three-column rules, 90px preset cards, 98px row spacing, label/preview positions, and the compact Load/Del action row.
+- Removed the extra per-card Export action from the folder page, which was not part of the original folder-card UI; retained the folder JSON export, JSON import, and legacy ZIP import actions.
+- Kept the working system-picker routes and the Add Preset dialog's live preview.
+- Added `scripts/verify_folder_page.py` with geometry, action-layout, preview, scrolling, archive-integrity, and method-descriptor checks.
+
+### Validation:
+- `scripts/verify_port.py`: 12 passed.
+- `scripts/verify_ui_parity.py`: 48 passed.
+- `scripts/verify_folder_page.py`: 16 passed.
+- `scripts/verify_crash_fix.py`: passed.
+- `scripts/verify_widget_registration.py`: passed; no obsolete `AbstractWidget` descriptor remains.
+- `scripts/verify_preview_picker_regressions.py`: passed for ARGB preview calls, Windows Forms route, dynamic Format selector, Custom Output always-disabled state, styled text widths, sticky section title, target metadata, and catalogue integrity.
+- Java parse check: 26 source files, 0 syntax errors.
+- Gradient smoke tests: 7 passed.
+- JAR ZIP integrity, duplicate-entry, bytecode parse, Minecraft target metadata, and Community catalogue checks passed.
+
+### Testing limitations:
+- This build was compiled from selected reconstructed source classes against local API-signature stubs, not with a full Gradle build against the official Minecraft 26.1.2/Fabric dependencies.
+- The Windows Forms picker cannot be exercised in this Linux build environment. Verify it in Prism on Windows, including open, save, cancel, JSON, and legacy ZIP flows.
+- A live Minecraft client launch and visual/interaction verification were not possible here. Keep this version in testing and report any new client errors.
+---

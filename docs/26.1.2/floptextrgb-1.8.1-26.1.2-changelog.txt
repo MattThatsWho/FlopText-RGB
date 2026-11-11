@@ -1,0 +1,15 @@
+---
+## floptextrgb-1.8.1-26.1.2 - ChangeLog
+~~~
+Type: Beta
+Reason: In Testing
+~~~
+
+### Added:
+- Added a small `Click to edit` tooltip when hovering over the selected gradient stop's color swatch.
+- Tooltip is drawn above the editor UI, with screen-edge positioning, and is suppressed while the Custom Output or HSV color-picker modal is open.
+
+### Preserved:
+- HSV color selector, hue/saturation/brightness interaction, live HEX preview, Apply Color, and Cancel behavior.
+- Existing screenshot-based picker, clipboard fix, output generation, preset schema, and all 431 Community Presets across 16 categories.
+- Minecraft 26.1.2-only target; no website or other Minecraft-version updates.

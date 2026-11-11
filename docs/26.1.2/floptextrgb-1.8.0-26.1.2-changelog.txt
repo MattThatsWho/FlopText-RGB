@@ -1,0 +1,20 @@
+---
+Type: Beta
+Reason: In Testing
+---
+
+### Added
+- Clicking the selected color swatch opens an in-mod HSV color selector.
+- Added a draggable saturation/brightness square and a draggable hue slider.
+- Added a live color preview and editable HEX field that update while dragging or typing.
+- Added Apply Color and Cancel actions. Apply updates the selected gradient stop; Cancel discards pending picker edits.
+- Invalid HEX input is reported and cannot be applied.
+
+### Preserved
+- The existing screenshot-based in-game picker remains available from the separate picker button.
+- Existing gradient-stop positions, output formatting, clipboard copy, favorites, preset folders, import/export, and all 431 Community Presets remain intact.
+- This update is limited to Minecraft 26.1.2. No other Minecraft-version target and no website files were updated.
+
+### Testing status
+- Static regression checks pass.
+- Not yet rebuilt through Gradle against official Minecraft/Fabric 26.1.2 dependencies or verified in a live Prism client.

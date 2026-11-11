@@ -1,0 +1,20 @@
+# FlopText RGB 1.8.1 for Minecraft 26.3 — BugLog
+Status: In Testing; metadata-patched compatibility candidate, runtime behavior unknown.
+
+## Port/candidate work
+- Based on the user's working/tested 26.1.2 candidate `floptextrgb-1.8.1-26.1.2.jar`.
+- Updated only `fabric.mod.json`: mod version to `1.8.1-26.3`, Minecraft target to `26.3`, Java minimum `>=25`, Cloth Config minimum `>=26.3.159`, and Mod Menu recommendation `>=21.0.0`.
+- Preserved all 35 class files and all resources, including the preset data, byte-for-byte.
+- JAR archive integrity, metadata, and target dependencies were statically checked.
+
+## Open compatibility risks
+- No official Gradle compile against Minecraft 26.3 dependencies could run in this environment.
+- No real Prism 26.3 launch or in-game behavior test has run. Minecraft 26.3 has mod-facing rendering and SDL/input changes; possible linkage/input/render issues are still unknown.
+- Current host has Java 21 only, no Gradle install, and network DNS is unavailable to fetch Java 25, Gradle, or game/dependency artifacts.
+
+## Must verify
+- Launch, entrypoints, Mod Menu, editor screen rendering and opening.
+- Text input/keyboard/mouse with 26.3 SDL implementation.
+- Color swatch hover tooltip, HSV picker interactions, screenshot picker, clipboard, PC file picker.
+- Preset Library/Favorites/folders, Community Presets (431 across 16 categories), import/export, and config persistence.
+- Save full latest.log and crash report if any step fails. Don't call this stable until the owner verifies it.

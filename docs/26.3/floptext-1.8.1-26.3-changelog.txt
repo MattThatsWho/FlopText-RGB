@@ -1,0 +1,16 @@
+---
+## floptext-1.8.1-26.3 - ChangeLog
+~~~
+Type: Beta
+Reason: In Testing
+~~~
+
+### Port candidate:
+- Created an experimental Minecraft 26.3 compatibility candidate from the owner-provided 26.1.2 JAR.
+- Updated `fabric.mod.json` to target Minecraft 26.3 / version `1.8.1-26.3`, require Java 25+, and set 26.3-compatible minimums for Cloth Config and Mod Menu.
+- Preserved all 35 compiled classes, all resources, the HSV swatch color picker, `Click to edit` tooltip, preset schema, and 431 Community Presets across 16 categories byte-for-byte.
+
+### Status / limitations:
+- JAR archive and metadata checks passed; only `fabric.mod.json` differs from the 26.1.2 baseline.
+- This is a metadata/dependency compatibility candidate, not a source rebuild against official 26.3 dependencies.
+- No live Minecraft 26.3 launch was possible here. API linkage, rendering, SDL text input, file picker, clipboard, and interactions remain In Testing until the owner tests them in Prism.

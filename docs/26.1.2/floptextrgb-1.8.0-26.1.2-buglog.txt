@@ -1,0 +1,18 @@
+# FlopText RGB 1.8.0 for Minecraft 26.1.2 — BugLog
+Status: In Testing; not a confirmed stable release.
+
+## Added in the candidate
+1. Added a modal HSV color selector opened by clicking the currently selected stop's color swatch.
+2. Added a saturation/brightness selection plane and hue slider with click-and-drag updates.
+3. Added live swatch preview and HEX field updates while dragging; direct HEX typing also updates the preview when valid.
+4. Added Apply Color/Cancel behavior; invalid HEX cannot be applied and Cancel discards pending changes.
+
+## Known validation limitation
+- The candidate is patched from the exact GitLab v1.7.2 JAR. Only FlopTextRGBScreen.class and fabric.mod.json changed.
+- The changed class was compiled against local API-signature stubs because JDK 25 and official Minecraft/Fabric 26.1.2 dependencies were unavailable. Static linkage checks pass, but runtime behavior remains unconfirmed until tested in Prism.
+- No confirmed crash is currently reported for this candidate because it has not yet been launched in-game.
+
+## Required regression checks
+- Verify that clicking the actual color swatch opens the modal and clicking elsewhere cannot interact with controls behind it.
+- Verify HSV plane and hue slider clicks/drags, marker position, live HEX and preview updates, valid/invalid HEX entry, Apply, Cancel, and Escape.
+- Verify the original screenshot picker, gradient-stop drag, output formats, copy to clipboard, and preset/library workflows are unaffected.

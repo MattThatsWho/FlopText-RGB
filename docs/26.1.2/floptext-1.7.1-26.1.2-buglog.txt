@@ -1,0 +1,17 @@
+# FlopText RGB 1.7.1 for Minecraft 26.1.2 — BugLog
+Status: In Testing; not a confirmed stable release.
+
+## Fixed in this candidate
+
+1. Copy / Copy To Clipboard called GLFW.glfwSetClipboardString with the invalid descriptor (JLjava/lang/String;)V. The packaged call does not match LWJGL's CharSequence parameter and can fail at button-click time. It now uses Minecraft's TextFieldHelper.setClipboardContents(Minecraft, String) helper.
+2. The main editor now shows “Output copied to clipboard.” after the clipboard helper returns. The existing notice-rendering fields had been wired in the screen renderer, but tell(String) was a no-op; tell now updates the notice text and duration.
+
+## Required user verification
+
+- Launch in Minecraft 26.1.2 with the expected Java 25 / Fabric environment.
+- Open FlopText RGB and click Copy To Clipboard at normal GUI scale; test Copy on a narrow/high-scale layout if available.
+- Paste into a plain text application outside Minecraft and compare the pasted output with the on-screen output.
+- Try at least Legacy Hex and MiniMessage. Include Vanilla / Spigot and Custom if possible.
+- Check for the success message and report any crash/log error.
+
+The source project is reconstructed and this candidate has not been built through Gradle against official dependencies or tested inside the user's client in this environment. Do not call it stable until the user verifies it in Prism.

@@ -1,0 +1,23 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a bug
+    url: https://mattsmods.vercel.app/floptextrgb/report-bug
+    about: Found something broken? Bug reports are handled on the FlopText RGB website.
+  - name: Suggestions
+    url: https://mattsmods.vercel.app/floptextrgb/suggestions
+    about: Ideas for the mod, the website, or new Minecraft version support.
+  - name: Support
+    url: https://mattsmods.vercel.app/floptextrgb/support
+    about: Need help using FlopText RGB?
+  - name: Threads
+    url: https://mattsmods.vercel.app/floptextrgb/threads
+    about: Talk with other players and the developer.
+  - name: Community creations
+    url: https://mattsmods.vercel.app/floptextrgb/community
+    about: Share and browse gradients made with the mod.
+  - name: Collections
+    url: https://mattsmods.vercel.app/floptextrgb/collections
+    about: Browse and make preset collections.
+  - name: Download
+    url: https://mattsmods.vercel.app/floptextrgb/download
+    about: Get the latest FlopText RGB release.

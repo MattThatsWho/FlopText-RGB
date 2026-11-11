@@ -1,0 +1,14 @@
+---
+## floptext-1.7.1-26.1.2 - ChangeLog
+~~~
+Type: Beta
+Reason: In Testing
+~~~
+
+### Fixed
+- Fixed the Copy and Copy To Clipboard actions to use Minecraft 26.1.2's clipboard helper instead of an incompatible direct GLFW method call.
+- Added visible confirmation after output is copied, using the editor's existing notice area.
+- Enabled the editor's existing notice helper so its confirmation message is actually displayed.
+
+### Preserved
+- Kept output generation, formatting modes, preset JSON schema, 431 Community Presets across 16 categories, PC file picker, Library scrolling, preview rendering, and folder-page layout unchanged.
