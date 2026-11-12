@@ -45,5 +45,5 @@ java {
 }
 
 tasks.named('jar') {
-    archiveFileName = 'floptext-1.8.1-26.3.jar'
+    archiveFileName = "floptext-rgb-${project.mod_version}.jar"
 }

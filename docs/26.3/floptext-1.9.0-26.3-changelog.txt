@@ -1,0 +1,20 @@
+---
+## floptext-1.9.0-26.3 - ChangeLog
+~~~
+Type: Release
+Reason: UI polish
+~~~
+
+### Improved:
+- Gradient bar is now framed and uses its full height, with a subtle highlight and shade, so more of the gradient is visible.
+- Stop markers are now a thin stem through the bar plus a color knob underneath, instead of a square that covered the gradient. The selected stop is larger with an accent ring, stops highlight when hovered, and the selected stop's position is shown as a percentage.
+- Easier to grab: the stop hit area now covers the stem and knob.
+- Preview box now has a border, and the selected-color swatch has an even frame.
+- Jar is named floptext-rgb-1.9.0-26.3.jar.
+
+### Changed:
+- Source now shares one code base with 26.1.2 and 26.2; only compat/Compat.java differs.
+
+### Preserved:
+- Output generation, HSV swatch picker, "Click to edit" tooltip, preset schema, Favorites/folders, import/export, and all 431 Community Presets across 16 categories.
+---

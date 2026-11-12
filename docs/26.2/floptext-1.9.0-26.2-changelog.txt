@@ -1,0 +1,21 @@
+---
+## floptext-1.9.0-26.2 - ChangeLog
+~~~
+Type: Beta
+Reason: New Minecraft version, in testing
+~~~
+
+### Improved:
+- Gradient bar is now framed and uses its full height, with a subtle highlight and shade, so more of the gradient is visible.
+- Stop markers are now a thin stem through the bar plus a color knob underneath, instead of a square that covered the gradient. The selected stop is larger with an accent ring, stops highlight when hovered, and the selected stop's position is shown as a percentage.
+- Easier to grab: the stop hit area now covers the stem and knob.
+- Preview box now has a border, and the selected-color swatch has an even frame.
+- Jar is named floptext-rgb-1.9.0-26.2.jar.
+
+### Changed:
+- First FlopText RGB build for Minecraft 26.2 (Java 25+, Fabric Loader 0.19.5+, Cloth Config 26.2.155+, Mod Menu 20+).
+- 26.2 adapter: the current-screen API moved to Minecraft.gui, while input is still GLFW (left click is 0).
+
+### Preserved:
+- Output generation, HSV swatch picker, "Click to edit" tooltip, preset schema, Favorites/folders, import/export, and all 431 Community Presets across 16 categories.
+---

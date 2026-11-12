@@ -24,8 +24,8 @@ public final class FlopTextRGBMod implements ClientModInitializer {
         KeyMapping.Category category = KeyMapping.Category.register(
             Identifier.fromNamespaceAndPath(NAMESPACE, "main")
         );
-        // Default key is V. 26.3 uses SDL key codes, so the key is created through the Compat adapter.
-        KeyMapping key = Compat.key("key.floptext_rgb.open", Compat.SDL_SCANCODE_V, category);
+        // Default key is V. The key code and constructor differ per Minecraft version, so it goes through Compat.
+        KeyMapping key = Compat.key("key.floptext_rgb.open", Compat.OPEN_KEY_DEFAULT, category);
         if (key != null) {
             openGuiKey = KeyMappingHelper.registerKeyMapping(key);
         }

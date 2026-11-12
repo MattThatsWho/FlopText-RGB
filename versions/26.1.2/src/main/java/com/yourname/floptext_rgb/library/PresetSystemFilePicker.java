@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.compat.Compat;
+
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig;
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig.GradientPreset;
 import net.minecraft.client.Minecraft;
@@ -277,7 +279,7 @@ public final class PresetSystemFilePicker {
                 if (owner instanceof PresetLibraryScreen screen) screen.setNotice(message);
                 else if (owner instanceof PresetFolderScreen screen) screen.setNotice(message);
                 else if (owner instanceof PresetFileBrowserScreen screen) screen.setNotice(message);
-                else if (owner instanceof Screen screen) Minecraft.getInstance().setScreen(screen);
+                else if (owner instanceof Screen screen) Compat.setScreen(screen);
             });
         } catch (Throwable ignored) { }
     }

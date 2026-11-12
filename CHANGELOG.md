@@ -2,10 +2,16 @@
 
 Full per-version notes live in [`docs/`](docs). Versions are listed newest first.
 
-## 1.8.1 (Minecraft 26.3): experimental
-- Experimental compatibility build made from the 26.1.2 build with only `fabric.mod.json` changed (Minecraft 26.3, Java 25+, Cloth Config 26.3.159+, Mod Menu 21+).
-- Not confirmed working in a live client.
-- Source: added a 26.3 compatibility layer (`gui.setScreen`/`gui.screen()`, SDL left-click, key mapping, screenshot target lookup). Untested in-game.
+## 1.9.0 (Minecraft 26.1.2, 26.2, 26.3)
+- New gradient bar and stop markers: framed full-height bar, thin stems with color knobs below it instead of squares covering the gradient, larger accent-ringed selected stop, hover highlight, and the selected stop's position shown in percent.
+- Larger, easier-to-grab stop hit area. Bordered preview box and evenly framed color swatch.
+- Added Minecraft 26.2 support (new, untested).
+- One shared source for 26.1.2 / 26.2 / 26.3 with a small per-version `Compat` adapter.
+- Jar files are now named `floptext-rgb-<version>-<minecraft>.jar`.
+
+## 1.8.1 (Minecraft 26.3)
+- Rebuilt from source for 26.3 with a small compatibility layer for 26.3's screen API (`gui.setScreen` / `gui.screen()`), SDL input (left click is 1, SDL key codes), the hotkey `KeyMapping`, and the screenshot color picker.
+- Confirmed working in a 26.3 client. Supersedes the earlier metadata-only candidate.
 
 ## 1.8.1 (Minecraft 26.1.2)
 - Added a small "Click to edit" tooltip when hovering the selected stop's color swatch.

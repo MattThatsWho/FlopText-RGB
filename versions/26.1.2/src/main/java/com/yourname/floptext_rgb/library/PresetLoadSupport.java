@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.compat.Compat;
+
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig.GradientPreset;
 import com.yourname.floptext_rgb.screen.FlopTextRGBScreen;
 import net.minecraft.client.Minecraft;
@@ -18,6 +20,6 @@ public final class PresetLoadSupport {
             throw new IllegalArgumentException("Owner is not a FlopText RGB editor screen.");
         }
         editor.applyPreset(preset);
-        Minecraft.getInstance().setScreen(editor);
+        Compat.setScreen(editor);
     }
 }

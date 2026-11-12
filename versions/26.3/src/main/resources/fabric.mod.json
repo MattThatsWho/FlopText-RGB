@@ -3,7 +3,7 @@
   "id": "floptext_rgb",
   "version": "${version}",
   "name": "FlopText RGB",
-  "description": "Client-side multi-stop RGB text gradient creator for Minecraft 26.3.",
+  "description": "Client-side multi-stop RGB text gradient creator for Minecraft.",
   "authors": [
     "MattThatsWho"
   ],

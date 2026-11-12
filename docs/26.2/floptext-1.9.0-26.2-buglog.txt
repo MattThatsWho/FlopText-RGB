@@ -1,0 +1,10 @@
+# FlopText RGB 1.9.0 for Minecraft 26.2 — BugLog
+Status: In Testing. First 26.2 build, made from the shared 26.1.2/26.3 source with a 26.2 Compat adapter.
+
+## Must verify in a 26.2 client
+- Launch without crash; hotkey (V) opens the editor; Mod Menu opens it too.
+- Buttons respond to left-click; stop dragging; clicking the bar adds a stop; HSV picker; HEX input.
+- New stop markers look right: stem, knob, percentage label, hover highlight.
+- Screenshot picker (uses a type-based framebuffer lookup on 26.2), clipboard copy, PC file picker.
+- Library, Favorites, folders, Community Presets, JSON/ZIP import and export, config persistence.
+- Save the full latest.log and any crash report if something fails.

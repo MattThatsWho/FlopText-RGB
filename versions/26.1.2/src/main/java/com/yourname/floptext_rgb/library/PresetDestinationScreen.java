@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.compat.Compat;
+
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig;
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig.GradientPreset;
 import com.yourname.floptext_rgb.screen.FlopTextRGBScreen;
@@ -25,8 +27,8 @@ public final class PresetDestinationScreen extends Screen {
         this.pendingName = mainScreen.getPresetName();
     }
     public static void openFromMain(FlopTextRGBScreen main) {
-        Screen back = Minecraft.getInstance().screen;
-        Minecraft.getInstance().setScreen(new PresetDestinationScreen(main, back));
+        Screen back = Compat.screen();
+        Compat.setScreen(new PresetDestinationScreen(main, back));
     }
     @Override protected void init() {
         clearWidgets();
@@ -74,9 +76,9 @@ public final class PresetDestinationScreen extends Screen {
         list.add(preset);
         if(destination==0)FlopTextRGBConfig.save();else PresetLibraryStore.save();
         mainScreen.setPresetName(name);
-        Minecraft.getInstance().setScreen(returnScreen==null?mainScreen:returnScreen);
+        Compat.setScreen(returnScreen==null?mainScreen:returnScreen);
     }
-    private void cancel(){Minecraft.getInstance().setScreen(returnScreen==null?mainScreen:returnScreen);}
+    private void cancel(){Compat.setScreen(returnScreen==null?mainScreen:returnScreen);}
     private static boolean inside(double x,double y,int l,int t,int w,int h){return x>=l&&y>=t&&x<l+w&&y<t+h;}
     @Override public boolean mouseScrolled(double mouseX,double mouseY,double h,double v){if(mouseY>=viewportTop&&mouseY<=viewportBottom){scroll=Math.max(0,Math.min(scrollMax,scroll-(int)Math.signum(v)*24));init();return true;}return super.mouseScrolled(mouseX,mouseY,h,v);}
     @Override public void onClose(){cancel();}

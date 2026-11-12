@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.screen;
 
+import com.yourname.floptext_rgb.compat.Compat;
+
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig;
 import com.yourname.floptext_rgb.compat.StyleBooleanBridge;
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig.GradientPreset;
@@ -35,6 +37,7 @@ public final class FlopTextRGBScreen extends Screen {
     private static final int PANEL = 0xB90B0B0B;
     private static final int PANEL_EDGE = 0xFF3A3A3A;
     private static final int ACCENT = 0xFF7AA7FF;
+    private static final int BAR_FRAME = 0xFF5C5C5C;
     private static final int GREEN = 0xFF55FF55;
     private static final int RED = 0xFFFF5555;
     private static final float MIN_STOP_GAP = 0.005f;
@@ -280,7 +283,7 @@ public final class FlopTextRGBScreen extends Screen {
             addButton("Del", sidebarLeft + 15 + buttonWidth, y, buttonWidth, 18, b -> deletePreset(presetIndex));
         }
         addButton("", sidebarRight - 30, 14, 24, 24,
-            b -> Minecraft.getInstance().setScreen(new PresetLibraryScreen(this)));
+            b -> Compat.setScreen(new PresetLibraryScreen(this)));
         addButton("<", sidebarLeft + 6, bottomTop - 26, 22, 20, b -> changePage(-1));
         addButton(">", sidebarRight - 28, bottomTop - 26, 22, 20, b -> changePage(1));
     }
@@ -320,12 +323,12 @@ public final class FlopTextRGBScreen extends Screen {
 
         context.enableScissor(8, 44, sidebarLeft - 4, bottomTop - 8);
         drawLabel(context, "Preview", contentLeft + 8, previewTop + 7);
-        context.fill(contentLeft + 8, previewTop + 22, contentRight - 8, previewBottom - 6, 0xAA000000);
+        drawInset(context, contentLeft + 8, previewTop + 22, contentRight - 8, previewBottom - 6);
         drawPreview(context, contentLeft + 14, previewTop + 38);
 
         drawLabel(context, "Input", contentLeft + 8, inputTop + 7);
         drawGradientBar(context);
-        drawStopHandles(context);
+        drawStopHandles(context, mouseX, mouseY);
         drawColorControls(context);
 
         drawLabel(context, "Output", contentLeft + 8, outputTop + 7);
@@ -458,27 +461,66 @@ public final class FlopTextRGBScreen extends Screen {
         barScreenTop = y0;
         barScreenBottom = y0 + 12;
         int barWidth = Math.max(1, barRight - barLeft);
-        ctx.fill(barLeft, y0, barRight, y0 + 12, 0xFF202020);
+        // Thin frame around the whole bar so it reads as one control.
+        ctx.fill(barLeft - 1, y0 - 1, barRight + 1, y0 + 13, BAR_FRAME);
         for (int x = 0; x < barWidth; x++) {
             float p = barWidth <= 1 ? 0f : x / (float) (barWidth - 1);
             int color = 0xFF000000 | GradientCalculator.colorAt(stops, p);
             ctx.fill(barLeft + x, y0, barLeft + x + 1, y0 + 12, color);
         }
-        ctx.fill(barLeft, y0, barRight, y0 + 1, 0xFF000000);
-        ctx.fill(barLeft, y0 + 11, barRight, y0 + 12, 0xFF000000);
+        // Soft top highlight and bottom shade give the bar a little depth
+        // without hiding any of the gradient.
+        ctx.fill(barLeft, y0, barRight, y0 + 1, 0x33FFFFFF);
+        ctx.fill(barLeft, y0 + 11, barRight, y0 + 12, 0x33000000);
     }
 
-    private void drawStopHandles(GuiGraphicsExtractor ctx) {
-        for (int i = 0; i < stops.size(); i++) {
-            ColorStop stop = stops.get(i);
-            int x = positionToX(stop.position());
-            // Original 1.21.11 handles sit over the gradient bar: a crisp 14px
-            // outline and a 12px color face. Keep the geometry identical in 26.1.2.
-            int y = barScreenTop;
-            int color = 0xFF000000 | stop.rgb();
-            ctx.fill(x - 7, y - 1, x + 8, y + 13, i == selectedStop ? ACCENT : WHITE);
-            ctx.fill(x - 6, y, x + 6, y + 12, color);
+    /** Stop markers: a thin stem through the bar and a color knob underneath, so the gradient stays visible. */
+    private void drawStopHandles(GuiGraphicsExtractor ctx, int mouseX, int mouseY) {
+        int hovered = draggedStopRef == null ? handleAt(mouseX, mouseY) : -1;
+        // Unselected markers first, the selected one last so it is always on top.
+        for (int pass = 0; pass < 2; pass++) {
+            for (int i = 0; i < stops.size(); i++) {
+                boolean selected = i == selectedStop;
+                if ((pass == 1) != selected) continue;
+                ColorStop stop = stops.get(i);
+                drawStopHandle(ctx, positionToX(stop.position()), 0xFF000000 | stop.rgb(), selected, i == hovered);
+            }
         }
+        drawSelectedStopLabel(ctx);
+    }
+
+    private void drawStopHandle(GuiGraphicsExtractor ctx, int x, int rgb, boolean selected, boolean hovered) {
+        int top = barScreenTop;
+        int ring = selected ? ACCENT : (hovered ? 0xFFF2F2F2 : 0xFFC4C4C4);
+        int half = selected ? 6 : 5;
+        int size = half * 2 + 1;
+        int knobTop = top + 15;
+        // Stem: dark outline with a light core, running from above the bar to the knob.
+        ctx.fill(x - 1, top - 3, x + 2, knobTop, 0xFF000000);
+        ctx.fill(x, top - 2, x + 1, knobTop, ring);
+        // Knob: dark outline, colored ring, then the stop's color.
+        ctx.fill(x - half - 1, knobTop - 1, x + half + 2, knobTop + size + 1, 0xFF000000);
+        ctx.fill(x - half, knobTop, x + half + 1, knobTop + size, ring);
+        ctx.fill(x - half + 2, knobTop + 2, x + half - 1, knobTop + size - 2, rgb);
+    }
+
+    private void drawSelectedStopLabel(GuiGraphicsExtractor ctx) {
+        if (selectedStop < 0 || selectedStop >= stops.size()) return;
+        ColorStop stop = stops.get(selectedStop);
+        String label = Math.round(stop.position() * 100f) + "%";
+        int x = positionToX(stop.position());
+        int w = font.width(label);
+        int lx = x + 12;
+        if (lx + w > barRight + 4) lx = x - 12 - w;
+        ctx.text(font, Component.literal(label), lx, barScreenTop + 18, GRAY, false);
+    }
+
+    private void drawInset(GuiGraphicsExtractor ctx, int x1, int y1, int x2, int y2) {
+        ctx.fill(x1, y1, x2, y2, 0xAA000000);
+        ctx.fill(x1, y1, x2, y1 + 1, PANEL_EDGE);
+        ctx.fill(x1, y2 - 1, x2, y2, PANEL_EDGE);
+        ctx.fill(x1, y1, x1 + 1, y2, PANEL_EDGE);
+        ctx.fill(x2 - 1, y1, x2, y2, PANEL_EDGE);
     }
 
     private void layoutColorPicker() {
@@ -549,11 +591,11 @@ public final class FlopTextRGBScreen extends Screen {
         FlopIcons.drawLibrary(context, sidebarRight - 30, 14, mouseX, mouseY);
         context.enableScissor(8, 44, sidebarLeft - 4, bottomTop - 8);
         drawLabel(context, "Preview", contentLeft + 8, previewTop + 7);
-        context.fill(contentLeft + 8, previewTop + 22, contentRight - 8, previewBottom - 6, 0xAA000000);
+        drawInset(context, contentLeft + 8, previewTop + 22, contentRight - 8, previewBottom - 6);
         drawPreview(context, contentLeft + 14, previewTop + 38);
         drawLabel(context, "Input", contentLeft + 8, inputTop + 7);
         drawGradientBar(context);
-        drawStopHandles(context);
+        drawStopHandles(context, mouseX, mouseY);
         drawColorControls(context);
         drawLabel(context, "Output", contentLeft + 8, outputTop + 7);
         drawLabel(context, "Create Preset", contentLeft + 8, outputBottom - 36);
@@ -739,10 +781,10 @@ public final class FlopTextRGBScreen extends Screen {
 
     private void drawColorControls(GuiGraphicsExtractor ctx) {
         int y = inputBottom - 28;
+        int x = contentLeft + 8;
         int rgb = selectedStop >= 0 && selectedStop < stops.size() ? stops.get(selectedStop).rgb() : 0xFFFFFF;
-        ctx.fill(contentLeft + 8, y, contentLeft + 36, y + 18, 0xFF000000 | rgb);
-        ctx.fill(contentLeft + 8, y, contentLeft + 36, y + 1, 0xFF000000);
-        ctx.fill(contentLeft + 8, y + 17, contentLeft + 36, y + 18, 0xFFFFFFFF);
+        ctx.fill(x, y, x + 28, y + 18, 0xFF9A9A9A);
+        ctx.fill(x + 1, y + 1, x + 27, y + 17, 0xFF000000 | rgb);
     }
 
     private void drawPresetCardBackgrounds(GuiGraphicsExtractor ctx) {
@@ -937,7 +979,7 @@ public final class FlopTextRGBScreen extends Screen {
     }
 
     private void openPicker() {
-        Minecraft.getInstance().setScreen(new ColorPickerScreen(this, this::setSelectedColor));
+        Compat.setScreen(new ColorPickerScreen(this, this::setSelectedColor));
     }
 
     public void setSelectedColor(int rgb) {
@@ -945,7 +987,7 @@ public final class FlopTextRGBScreen extends Screen {
         ColorStop old = stops.get(selectedStop);
         stops.set(selectedStop, new ColorStop(rgb & 0xFFFFFF, old.position()));
         syncHex(); updateOutput();
-        Minecraft.getInstance().setScreen(this);
+        Compat.setScreen(this);
     }
 
     private void removeSelectedStop() {
@@ -1021,7 +1063,7 @@ public final class FlopTextRGBScreen extends Screen {
     private int handleAt(double x, double y) {
         for (int i = 0; i < stops.size(); i++) {
             int hx = positionToX(stops.get(i).position());
-            if (Math.abs(x - hx) <= 7 && y >= barScreenTop - 5 && y <= barScreenBottom + 10) return i;
+            if (Math.abs(x - hx) <= 7 && y >= barScreenTop - 4 && y <= barScreenTop + 30) return i;
         }
         return -1;
     }
@@ -1052,14 +1094,14 @@ public final class FlopTextRGBScreen extends Screen {
         double mouseX = click.x(), mouseY = click.y();
         int button = click.button();
         if (colorPickerOpen) {
-            if (button == 0 && mouseX >= pickerSquareX && mouseX < pickerSquareX + pickerSquareWidth
+            if (Compat.isLeft(button) && mouseX >= pickerSquareX && mouseX < pickerSquareX + pickerSquareWidth
                     && mouseY >= pickerSquareY && mouseY < pickerSquareY + pickerSquareHeight) {
                 draggingColorSquare = true;
                 draggingHueSlider = false;
                 setPickerFromSquare(mouseX, mouseY);
                 return true;
             }
-            if (button == 0 && mouseX >= pickerHueX && mouseX < pickerHueX + pickerHueWidth
+            if (Compat.isLeft(button) && mouseX >= pickerHueX && mouseX < pickerHueX + pickerHueWidth
                     && mouseY >= pickerHueY && mouseY < pickerHueY + pickerHueHeight) {
                 draggingHueSlider = true;
                 draggingColorSquare = false;
@@ -1072,7 +1114,7 @@ public final class FlopTextRGBScreen extends Screen {
             return true; // Modal input never leaks through to the editor below.
         }
         if (!templatePopup && PresetSettingsScreen.handleSettingsClick(this, click)) return true;
-        if (!templatePopup && button == 0 && mouseX >= contentLeft + 8 && mouseX < contentLeft + 36
+        if (!templatePopup && Compat.isLeft(button) && mouseX >= contentLeft + 8 && mouseX < contentLeft + 36
                 && mouseY >= inputBottom - 28 && mouseY < inputBottom - 10) {
             openColorPicker();
             return true;
@@ -1081,7 +1123,7 @@ public final class FlopTextRGBScreen extends Screen {
             // The v1.21.11 checkbox toggles Custom output on/off. Keep its hitbox
             // aligned with the drawn control rather than using a guessed widget box.
             int boxX = 12, boxY = 92, boxW = Math.max(1, width - 24), boxH = 18;
-            if (button == 0 && mouseX >= boxX && mouseX < boxX + boxW
+            if (Compat.isLeft(button) && mouseX >= boxX && mouseX < boxX + boxW
                     && mouseY >= boxY && mouseY < boxY + boxH) {
                 outputFormat = "Custom".equals(outputFormat) ? "Legacy Hex" : "Custom";
                 updateTemplateFieldState();
@@ -1093,14 +1135,14 @@ public final class FlopTextRGBScreen extends Screen {
             if (!overPopup) return true;
         }
         int hit = handleAt(mouseX, mouseY);
-        if (button == 0 && hit >= 0) {
+        if (Compat.isLeft(button) && hit >= 0) {
             selectStop(hit);
             draggedStop = hit;
             draggedStopRef = stops.get(hit);
             draggedEndpoint = hit == 0 || hit == stops.size() - 1;
             return true;
         }
-        if (button == 0 && mouseY >= barScreenTop && mouseY <= barScreenBottom && mouseX >= barLeft && mouseX <= barRight) {
+        if (Compat.isLeft(button) && mouseY >= barScreenTop && mouseY <= barScreenBottom && mouseX >= barLeft && mouseX <= barRight) {
             addStop(xToPosition(mouseX)); return true;
         }
         return super.mouseClicked(click, doubled);
@@ -1110,7 +1152,7 @@ public final class FlopTextRGBScreen extends Screen {
     public boolean mouseDragged(MouseButtonEvent click, double deltaX, double deltaY) {
         double mouseX = click.x();
         double mouseY = click.y();
-        if (colorPickerOpen && click.button() == 0) {
+        if (colorPickerOpen && Compat.isLeft(click.button())) {
             if (draggingColorSquare) {
                 setPickerFromSquare(mouseX, mouseY);
                 return true;
@@ -1121,7 +1163,7 @@ public final class FlopTextRGBScreen extends Screen {
             }
             return super.mouseDragged(click, deltaX, deltaY);
         }
-        if (draggedStopRef != null && click.button() == 0) {
+        if (draggedStopRef != null && Compat.isLeft(click.button())) {
             if (draggedEndpoint) return true;
             int currentIndex = indexOfIdentity(draggedStopRef);
             if (currentIndex < 0) {

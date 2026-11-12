@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.compat.Compat;
+
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig.GradientPreset;
 import com.yourname.floptext_rgb.screen.FlopTextRGBScreen;
 import net.minecraft.client.Minecraft;
@@ -276,7 +278,7 @@ public final class PresetFolderScreen extends Screen {
         PresetLibraryStore.Folder currentFolder = folder();
         if (currentFolder == null || index < 0 || index >= currentFolder.presets.size()) return;
         library.getMainScreen().applyPreset(currentFolder.presets.get(index));
-        Minecraft.getInstance().setScreen(library.getMainScreen());
+        Compat.setScreen(library.getMainScreen());
     }
 
     private void delete(int index) {
@@ -319,6 +321,6 @@ public final class PresetFolderScreen extends Screen {
         // defined once in init() so coordinates, paint geometry, and hitboxes match.
     }
 
-    private void goBack() { Minecraft.getInstance().setScreen(library); }
+    private void goBack() { Compat.setScreen(library); }
     @Override public void onClose() { goBack(); }
 }

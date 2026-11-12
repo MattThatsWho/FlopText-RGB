@@ -15,6 +15,7 @@ FlopText RGB is a **client-side Fabric mod** that lets you build multi-stop RGB 
 - **In-game gradient editor**: open it with the hotkey (**V** by default, rebindable in Controls) or from Mod Menu.
 - **Multi-stop gradients**: drag color stops along a rail and see the result live.
 - **HSV color selector**: click the selected stop's swatch for a hue/saturation/brightness picker with a live HEX field.
+- **Polished gradient bar**: thin stop markers with color knobs sit under the bar so the whole gradient stays visible, and the selected stop shows its position in percent.
 - **Multiple output formats**: MiniMessage, JSON, plain hex strings and traditional section codes, plus a custom template.
 - **Better Presets**: Favorites, custom folders, a preset library, and JSON import/export with a built-in file browser.
 - **Community Presets**: a built-in catalogue of 431 gradient presets across 16 categories, including 135 mob gradients and 23 seasonal/holiday ones.
@@ -23,13 +24,12 @@ FlopText RGB is a **client-side Fabric mod** that lets you build multi-stop RGB 
 
 | Minecraft | Folder | Status |
 |---|---|---|
-| **26.1.2** | [`versions/26.1.2`](versions/26.1.2) | Current. Mod version 1.8.1 |
-| **26.3** | [`versions/26.3`](versions/26.3) | **Experimental / untested.** See below |
+| **26.3** | [`versions/26.3`](versions/26.3) | Current. 1.8.1 build confirmed working in-game |
+| **26.2** | [`versions/26.2`](versions/26.2) | **New, untested.** First 26.2 build |
+| **26.1.2** | [`versions/26.1.2`](versions/26.1.2) | Current. 1.8.1 build confirmed working in-game |
 | 1.21.11 | [`versions/1.21.11`](versions/1.21.11) | Legacy (1.7.0). **No more updates** |
 
-Each version is a separate, self-contained Gradle project. They share no code.
-
-> **About 26.3:** the published 26.3 jar is the 26.1.2 build with only `fabric.mod.json` changed, and it has not been confirmed working in a 26.3 client. The 26.3 *source* in this repo has a small compatibility layer (`compat/Compat.java`) for 26.3's screen API and SDL input changes. It is untested in-game. See [`docs/26.3/PORT_26.3_STATUS.md`](docs/26.3/PORT_26.3_STATUS.md).
+The 26.x folders share the same Java source. Only `compat/Compat.java` differs, covering the screen API, input and key differences between Minecraft versions. 1.21.11 is separate legacy code.
 
 ## Installing
 
@@ -43,7 +43,7 @@ Download the mod from [Modrinth](https://modrinth.com) or the [website](https://
 
 | Folder | Java | Gradle |
 |---|---|---|
-| `versions/26.1.2`, `versions/26.3` | 25 | 9.7.1 |
+| `versions/26.1.2`, `versions/26.2`, `versions/26.3` | 25 | 9.7.1 |
 | `versions/1.21.11` | 21 | 9.2.1 |
 
 ```sh
@@ -55,9 +55,7 @@ The jar appears in `build/libs/`. No Gradle wrapper is included, so use an insta
 
 ## ⚠️ Source status (please read)
 
-The Java code in this repository was **reconstructed from compiled jars**. It is not the original authoring source, and it is not guaranteed to match the released jars line-for-line. The released 26.1.2 jars were produced by patching compiled classes.
-
-The 26.1.2 source **does compile** against the official Minecraft/Fabric dependencies in GitHub Actions, but a jar built from it has not been tested in-game. The 26.3 and 1.21.11 builds are allowed to fail while they're being sorted out. Hopefully this helps as a reference, a starting point or something to fork.
+The Java code in this repository began as source **reconstructed from compiled jars**. It is not the original authoring source, and early versions were produced by patching compiled classes. Since then the reconstructed source has been built by GitHub Actions: the 1.8.1 builds for 26.1.2 and 26.3 compile and were confirmed working in-game. 26.2 is new and untested, and 1.21.11 is frozen.
 
 The jars on Modrinth and the website are the authoritative releases.
 

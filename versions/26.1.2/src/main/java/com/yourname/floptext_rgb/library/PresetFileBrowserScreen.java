@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.compat.Compat;
+
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig;
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig.GradientPreset;
 import net.minecraft.client.Minecraft;
@@ -47,12 +49,12 @@ public final class PresetFileBrowserScreen extends Screen {
     }
     /** Opens the secondary in-game file browser without rechecking the picker preference. */
     static void openInGameTransfer(Object owner,int mode,int index){
-        Minecraft.getInstance().setScreen(new PresetFileBrowserScreen(owner,mode,index));
+        Compat.setScreen(new PresetFileBrowserScreen(owner,mode,index));
     }
-    public static void openLegacyImport(){openLegacyImport(Minecraft.getInstance().screen);}
+    public static void openLegacyImport(){openLegacyImport(Compat.screen());}
     public static void openLegacyImport(Object owner){openTransfer(owner,LEGACY_ZIP_IMPORT,-1);}
     public static void openFolderImport(Object owner){openTransfer(owner,IMPORT_FOLDER_ANY,-1);}
-    public static void openLegacyExportFolder(String folderName){openTransfer(Minecraft.getInstance().screen,LEGACY_ZIP_EXPORT,-1);}
+    public static void openLegacyExportFolder(String folderName){openTransfer(Compat.screen(),LEGACY_ZIP_EXPORT,-1);}
 
     @Override protected void init(){
         clearWidgets();listBottom=height-105;listTop=94;
@@ -150,7 +152,7 @@ public final class PresetFileBrowserScreen extends Screen {
     private boolean exportFolderPreset(Path target){PresetLibraryStore.Folder f=folderForOwner();return f!=null&&itemIndex>=0&&itemIndex<f.presets.size()&&PresetJsonTransfer.exportPresetJson(f.presets.get(itemIndex),target);}
     private boolean exportFolderZip(Path target){PresetLibraryStore.Folder f=folderForOwner();return f!=null&&PresetLibraryStore.exportFolder(f,target);}
     private PresetLibraryStore.Folder folderForOwner(){if(owner instanceof PresetFolderScreen f)return f.getFolder();if(owner instanceof PresetLibraryScreen)return null;return null;}
-    private void returnToOwner(String message){if(owner instanceof PresetLibraryScreen l&&!message.isBlank())l.setNotice(message);if(owner instanceof PresetFolderScreen f&&!message.isBlank())f.setNotice(message);Minecraft.getInstance().setScreen(owner instanceof Screen s?s:null);}
+    private void returnToOwner(String message){if(owner instanceof PresetLibraryScreen l&&!message.isBlank())l.setNotice(message);if(owner instanceof PresetFolderScreen f&&!message.isBlank())f.setNotice(message);Compat.setScreen(owner instanceof Screen s?s:null);}
     private String msg(Throwable t){return t.getMessage()==null?t.getClass().getSimpleName():t.getMessage();}
     private static String safeName(String s) {
         if (s == null) return "";

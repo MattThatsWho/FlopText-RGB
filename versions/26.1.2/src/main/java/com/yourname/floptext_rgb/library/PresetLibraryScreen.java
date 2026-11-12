@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.compat.Compat;
+
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig;
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig.GradientPreset;
 import com.yourname.floptext_rgb.screen.FlopTextRGBScreen;
@@ -79,7 +81,7 @@ public final class PresetLibraryScreen extends Screen {
             if (fullyVisible(top + 36, 18)) {
                 LibraryUi.button(this::addRenderableWidget, "Open", x + 8, top + 36,
                     Math.max(42, cardWidth - 42), 18,
-                    b -> Minecraft.getInstance().setScreen(new PresetFolderScreen(this, folderIndex)));
+                    b -> Compat.setScreen(new PresetFolderScreen(this, folderIndex)));
             }
             if (fullyVisible(top + 5, 18)) {
                 LibraryUi.button(this::addRenderableWidget, "X", x + cardWidth - 28, top + 5, 20, 18,
@@ -97,7 +99,7 @@ public final class PresetLibraryScreen extends Screen {
             int buttonWidth = (cardWidth - 24) / 2;
             if (fullyVisible(top + 66, 18)) {
                 LibraryUi.button(this::addRenderableWidget, "Load", x + 8, top + 66, buttonWidth, 18,
-                    b -> { mainScreen.applyPreset(favorites.get(index)); Minecraft.getInstance().setScreen(mainScreen); });
+                    b -> { mainScreen.applyPreset(favorites.get(index)); Compat.setScreen(mainScreen); });
                 LibraryUi.button(this::addRenderableWidget, "Del", x + 16 + buttonWidth, top + 66,
                     buttonWidth, 18, b -> deleteFavorite(index));
             }
@@ -284,7 +286,7 @@ public final class PresetLibraryScreen extends Screen {
     }
 
     @Override public void onClose() { goBack(); }
-    private void goBack() { Minecraft.getInstance().setScreen(mainScreen); }
+    private void goBack() { Compat.setScreen(mainScreen); }
     static String clip(String s, int n) { if (s == null) return ""; return s.length() <= n ? s : s.substring(0, Math.max(0, n - 1)) + "…"; }
     static int firstColor(GradientPreset preset) { return preset == null || preset.toStops().isEmpty() ? 0xFFFFFF : preset.toStops().get(0).rgb(); }
 }

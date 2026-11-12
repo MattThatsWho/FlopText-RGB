@@ -44,7 +44,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_25
 }
 
-// The filename follows the user's target naming convention exactly.
 tasks.named('jar') {
-    archiveFileName = 'floptextrgb-1.8.1-26.1.2.jar'
+    archiveFileName = "floptext-rgb-${project.mod_version}.jar"
 }

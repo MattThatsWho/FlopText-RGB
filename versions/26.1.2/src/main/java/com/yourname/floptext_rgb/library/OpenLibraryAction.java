@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.compat.Compat;
+
 import com.yourname.floptext_rgb.screen.FlopTextRGBScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -10,6 +12,6 @@ public final class OpenLibraryAction implements Button.OnPress {
     public OpenLibraryAction(FlopTextRGBScreen parent) { this.parent = parent; }
     @Override public void onPress(Button button) {
         PresetLibraryStore.reload();
-        Minecraft.getInstance().setScreen(new PresetLibraryScreen(parent));
+        Compat.setScreen(new PresetLibraryScreen(parent));
     }
 }

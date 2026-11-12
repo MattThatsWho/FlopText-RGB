@@ -1,0 +1,27 @@
+<details>
+<summary><strong>Drop 2 | Polished Editor</strong></summary>
+
+### A Cleaner Gradient Editor
+
+**Polished Editor** is a visual update for FlopText RGB, built for people who spend a lot of time dragging color stops around. The gradient slider has been redesigned so you can see your whole gradient while you work on it.
+
+### What's New?
+
+- **New Stop Markers:** Each stop is now a thin marker with a color knob underneath the bar, instead of a square sitting on top of your gradient. You can see every color change clearly.
+- **Selected Stop Highlight:** The stop you're editing is larger with an accent ring, and it shows its exact position in percent.
+- **Hover Feedback:** Stops light up when your mouse is over them, so you know what you're about to grab.
+- **Easier to Grab:** Stops have a bigger click area, covering both the stem and the knob.
+- **Framed Gradient Bar:** The bar now has a clean frame and uses its full height, with a subtle highlight and shade.
+- **Cleaner Preview and Swatch:** The preview box has a proper border, and the selected-color swatch has an even frame.
+
+### Now on Minecraft 26.2 Too
+
+FlopText RGB now has a build for **Minecraft 26.2**, alongside 26.1.2 and 26.3.
+
+### Open Source
+
+The source code is now public on GitHub! Take a look, fork it, or build on it.
+
+**FlopText RGB — Create it. Color it. Save it.**
+
+</details>

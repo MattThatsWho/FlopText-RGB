@@ -14,8 +14,8 @@ import java.lang.reflect.Method;
  * Modeled on the QualityClip 26.3 adapter. NOT yet verified in a live 26.3 client.
  */
 public final class Compat {
-    /** SDL scancode for the V key. */
-    public static final int SDL_SCANCODE_V = 25;
+    /** Default key for the open-editor hotkey: the SDL scancode for V on 26.3. */
+    public static final int OPEN_KEY_DEFAULT = 25;
 
     private Compat() {}
 
@@ -35,12 +35,12 @@ public final class Compat {
      * KeyMapping's constructor changed with the SDL switch, so look it up instead of hard-linking.
      * Tries (String, int, Category), then (String, Type, int, Category). Returns null if neither exists.
      */
-    public static KeyMapping key(String name, int sdlKey, KeyMapping.Category category) {
+    public static KeyMapping key(String name, int keyCode, KeyMapping.Category category) {
         try {
             for (Constructor<?> c : KeyMapping.class.getConstructors()) {
                 Class<?>[] p = c.getParameterTypes();
                 if (p.length == 3 && p[0] == String.class && p[1] == int.class && p[2] == KeyMapping.Category.class) {
-                    return (KeyMapping) c.newInstance(name, sdlKey, category);
+                    return (KeyMapping) c.newInstance(name, keyCode, category);
                 }
             }
             for (Constructor<?> c : KeyMapping.class.getConstructors()) {
@@ -52,7 +52,7 @@ public final class Compat {
                         String n = k.toString();
                         if (n.equals("KEYBOARD") || n.equals("KEYSYM")) type = k;
                     }
-                    if (type != null) return (KeyMapping) c.newInstance(name, type, sdlKey, category);
+                    if (type != null) return (KeyMapping) c.newInstance(name, type, keyCode, category);
                 }
             }
         } catch (Throwable ignored) {
