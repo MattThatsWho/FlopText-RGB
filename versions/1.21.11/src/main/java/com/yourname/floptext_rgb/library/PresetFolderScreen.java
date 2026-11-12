@@ -68,37 +68,36 @@ public final class PresetFolderScreen extends Screen {
         scrollMax = Math.max(0, contentHeight - (viewportBottom - viewportTop));
         scroll = Math.max(0, Math.min(scroll, scrollMax));
 
-        LibraryUi.button(this, "Back", left, 14, 70, 22, b -> goBack());
-        LibraryUi.button(this, "Save Current Here", left + 78, 14, compact ? 112 : 132, 22,
+        LibraryUi.button(this::addDrawableChild, "Back", left, 14, 70, 22, b -> goBack());
+        LibraryUi.button(this::addDrawableChild, "Save Current Here", left + 78, 14, compact ? 112 : 132, 22,
             b -> openAddPopup());
 
         int exportX = left + (compact ? 198 : 218);
         int exportW = Math.max(82, right - exportX - (compact ? 0 : 80));
-        LibraryUi.button(this, "Export Folder JSON", exportX, 14, exportW, 22,
+        LibraryUi.button(this::addDrawableChild, "Export Folder JSON", exportX, 14, exportW, 22,
             b -> exportCurrentFolder());
         if (!compact) {
-            LibraryUi.button(this, "Export ZIP", right - 74, 14, 74, 22, b -> exportLegacyZip());
+            LibraryUi.button(this::addDrawableChild, "Export ZIP", right - 74, 14, 74, 22, b -> exportLegacyZip());
         }
 
         if (compact) {
             int gap = 5;
             int slot = Math.max(1, (availableWidth - gap * 2) / 3);
-            LibraryUi.button(this, "Import JSON", left, 47, slot, 22,
+            LibraryUi.button(this::addDrawableChild, "Import JSON", left, 47, slot, 22,
                 b -> PresetJsonTransfer.importJsonToFolderDialog(this));
-            LibraryUi.button(this, "Import ZIP", left + slot + gap, 47, slot, 22,
+            LibraryUi.button(this::addDrawableChild, "Import ZIP", left + slot + gap, 47, slot, 22,
                 b -> PresetFileBrowserScreen.openLegacyImport(library));
-            LibraryUi.button(this, "Export ZIP", left + (slot + gap) * 2, 47,
+            LibraryUi.button(this::addDrawableChild, "Export ZIP", left + (slot + gap) * 2, 47,
                 availableWidth - (slot + gap) * 2, 22, b -> exportLegacyZip());
         } else {
             int secondRowWidth = Math.max(100, (availableWidth - 8) / 2);
-            LibraryUi.button(this, "Import Presets JSON", left, 47, secondRowWidth, 22,
+            LibraryUi.button(this::addDrawableChild, "Import Presets JSON", left, 47, secondRowWidth, 22,
                 b -> PresetJsonTransfer.importJsonToFolderDialog(this));
-            LibraryUi.button(this, "Import Folder ZIP", left + secondRowWidth + 8, 47,
+            LibraryUi.button(this::addDrawableChild, "Import Folder ZIP", left + secondRowWidth + 8, 47,
                 secondRowWidth, 22, b -> PresetFileBrowserScreen.openLegacyImport(library));
         }
 
         if (currentFolder != null) {
-            context.enableScissor(14, viewportTop, width - 14, viewportBottom);
             for (int i = 0; i < currentFolder.presets.size(); i++) {
                 final int index = i;
                 int col = i % columns;
@@ -110,11 +109,11 @@ public final class PresetFolderScreen extends Screen {
                 int innerWidth = Math.max(120, cardWidth - 10);
                 int gap = 4;
                 int buttonWidth = Math.max(32, (innerWidth - gap * 2) / 3);
-                LibraryUi.button(this, "Load", x + 5, y + 40, buttonWidth, 20,
+                LibraryUi.button(this::addDrawableChild, "Load", x + 5, y + 40, buttonWidth, 20,
                     b -> load(index));
-                LibraryUi.button(this, "Delete", x + 5 + buttonWidth + gap, y + 40,
+                LibraryUi.button(this::addDrawableChild, "Delete", x + 5 + buttonWidth + gap, y + 40,
                     buttonWidth, 20, b -> delete(index));
-                LibraryUi.button(this, "Export", x + 5 + (buttonWidth + gap) * 2, y + 40,
+                LibraryUi.button(this::addDrawableChild, "Export", x + 5 + (buttonWidth + gap) * 2, y + 40,
                     buttonWidth, 20, b -> PresetJsonTransfer.exportFolderPresetDialog(this, index));
             }
         }
@@ -135,7 +134,7 @@ public final class PresetFolderScreen extends Screen {
         int w = Math.min(340, width - 24);
         int x = (width - w) / 2;
         int y = height / 2 - 44;
-        LibraryUi.button(this, "Delete Preset", x + 14, y + 42, Math.max(90, (w - 36) / 2), 22, b -> {
+        LibraryUi.button(this::addDrawableChild, "Delete Preset", x + 14, y + 42, Math.max(90, (w - 36) / 2), 22, b -> {
             PresetLibraryStore.Folder target = folder();
             int index = confirmDeleteIndex;
             confirmDeleteIndex = -1;
@@ -146,7 +145,7 @@ public final class PresetFolderScreen extends Screen {
             }
             init();
         });
-        LibraryUi.button(this, "Cancel", x + w / 2 + 4, y + 42, Math.max(90, (w - 36) / 2), 22, b -> {
+        LibraryUi.button(this::addDrawableChild, "Cancel", x + w / 2 + 4, y + 42, Math.max(90, (w - 36) / 2), 22, b -> {
             confirmDeleteIndex = -1;
             init();
         });
@@ -162,7 +161,7 @@ public final class PresetFolderScreen extends Screen {
         presetNameField.setText("My Gradient");
         addDrawableChild(presetNameField);
 
-        LibraryUi.button(this, "Add Preset", x + 16, y + 70, 125, 22, b -> {
+        LibraryUi.button(this::addDrawableChild, "Add Preset", x + 16, y + 70, 125, 22, b -> {
             PresetLibraryStore.Folder target = folder();
             if (target == null) {
                 setNotice("Folder not found.");
@@ -184,7 +183,7 @@ public final class PresetFolderScreen extends Screen {
             setNotice("Preset added to folder.");
             init();
         });
-        LibraryUi.button(this, "Cancel", x + w - 140, y + 70, 124, 22, b -> {
+        LibraryUi.button(this::addDrawableChild, "Cancel", x + w - 140, y + 70, 124, 22, b -> {
             addPresetPopup = false;
             init();
         });
@@ -302,7 +301,7 @@ public final class PresetFolderScreen extends Screen {
     }
 
     public void addTransferButton(String title, int x, int y, int w, int h, Runnable action) {
-        LibraryUi.button(this, title, x, y, w, h, b -> action.run());
+        LibraryUi.button(this::addDrawableChild, title, x, y, w, h, b -> action.run());
     }
 
     public void installTransferButtons() {

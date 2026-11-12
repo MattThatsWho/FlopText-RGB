@@ -11,9 +11,10 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 /** Shared styling and layout helpers for the recovered library screens. */
 final class LibraryUi {
     private LibraryUi() { }
-    static ButtonWidget button(Screen screen, String title, int x, int y, int w, int h, ButtonWidget.PressAction action) {
+    static ButtonWidget button(java.util.function.Consumer<ButtonWidget> register, String title, int x, int y, int w, int h, ButtonWidget.PressAction action) {
         ButtonWidget b = ButtonWidget.builder(Text.literal(title), action).dimensions(x, y, w, h).build();
-        screen.addDrawableChild(b); return b;
+        register.accept(b);
+        return b;
     }
     static void label(DrawContext c, TextRenderer renderer, String text, int x, int y, int color) { c.drawTextWithShadow(renderer, text, x, y, color); }
     static void panel(DrawContext c, int x, int y, int w, int h) {

@@ -4,7 +4,8 @@ Full per-version notes live in [`docs/`](docs). Versions are listed newest first
 
 ## 1.8.1 (Minecraft 26.3): experimental
 - Experimental compatibility build made from the 26.1.2 build with only `fabric.mod.json` changed (Minecraft 26.3, Java 25+, Cloth Config 26.3.159+, Mod Menu 21+).
-- Not compiled against 26.3 APIs and not confirmed working in a live client.
+- Not confirmed working in a live client.
+- Source: added a 26.3 compatibility layer (`gui.setScreen`/`gui.screen()`, SDL left-click, key mapping, screenshot target lookup). Untested in-game.
 
 ## 1.8.1 (Minecraft 26.1.2)
 - Added a small "Click to edit" tooltip when hovering the selected stop's color swatch.

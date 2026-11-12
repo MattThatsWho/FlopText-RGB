@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.compat.Compat;
+
 import com.yourname.floptext_rgb.screen.FlopTextRGBScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -300,7 +302,7 @@ public final class CommunityPresetScreen extends Screen {
         if (r == null) return;
         String label = r[4] == 1 ? "" : "     Community";
         library.addTransferButton(label, r[0], r[1], r[2], r[3], () ->
-            Minecraft.getInstance().setScreen(new CommunityPresetScreen(library, library.getMainScreen())));
+            Compat.setScreen(new CommunityPresetScreen(library, library.getMainScreen())));
     }
 
     /** Draws the pixel-person glyph over the blank leading space of the button label. */
@@ -322,10 +324,10 @@ public final class CommunityPresetScreen extends Screen {
 
     /** Called before ordinary Screen widget dispatch, matching the original custom hit-test path. */
     public static boolean handleLibraryEntryClick(PresetLibraryScreen library, MouseButtonEvent click) {
-        if (library == null || click == null || click.button() != 0 || library.isModalOpen()) return false;
+        if (library == null || click == null || !Compat.isLeft(click.button()) || library.isModalOpen()) return false;
         int[] r = libraryEntryRect(library);
         if (r == null || !inside(click.x(), click.y(), r[0], r[1], r[2], r[3])) return false;
-        Minecraft.getInstance().setScreen(new CommunityPresetScreen(library, library.getMainScreen()));
+        Compat.setScreen(new CommunityPresetScreen(library, library.getMainScreen()));
         return true;
     }
 
@@ -355,7 +357,7 @@ public final class CommunityPresetScreen extends Screen {
     @Override
     public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         double mouseX = click.x(), mouseY = click.y();
-        if (click.button() != 0) return super.mouseClicked(click, doubled);
+        if (!Compat.isLeft(click.button())) return super.mouseClicked(click, doubled);
 
         // Let the actual edit box process clicks before handling our custom controls.
         if (inside(mouseX, mouseY, 18, 48, fieldWidth(), 20))
@@ -411,7 +413,7 @@ public final class CommunityPresetScreen extends Screen {
     }
 
     @Override public void onClose() { closeToLibrary(); }
-    private void closeToLibrary() { Minecraft.getInstance().setScreen(parent); }
+    private void closeToLibrary() { Compat.setScreen(parent); }
 
     private record CardHit(CommunityPresetRepository.CommunityPreset preset, int x, int y, int w, int h) { }
     private record TagHit(String tag, String label, int x, int y, int w, int h) { }

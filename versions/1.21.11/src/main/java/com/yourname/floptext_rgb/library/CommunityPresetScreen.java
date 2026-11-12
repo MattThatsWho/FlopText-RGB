@@ -39,18 +39,18 @@ public final class CommunityPresetScreen extends Screen {
     @Override protected void init() {
         String previousQuery = searchField == null ? "" : searchField.getText();
         clearChildren();
-        LibraryUi.button(this, "Back", 14, 12, 78, 22, b -> closeToLibrary());
+        LibraryUi.button(this::addDrawableChild, "Back", 14, 12, 78, 22, b -> closeToLibrary());
         int fw = fieldWidth();
         searchField = new TextFieldWidget(textRenderer, (width - fw) / 2, 48, fw, 22, Text.literal("Search Community Presets"));
         searchField.setMaxLength(100);
         searchField.setText(previousQuery);
         searchField.setChangedListener(v -> { page = 0; layout(); });
         addDrawableChild(searchField);
-        LibraryUi.button(this, "Clear", clearX(), 48, 74, 22, b -> { searchField.setText(""); page = 0; });
+        LibraryUi.button(this::addDrawableChild, "Clear", clearX(), 48, 74, 22, b -> { searchField.setText(""); page = 0; });
         layout();
-        LibraryUi.button(this, "‹ Previous", 14, height - 34, 105, 22, b -> { if (page > 0) page--; init(); });
-        LibraryUi.button(this, "Next ›", width - 119, height - 34, 105, 22, b -> { if (page + 1 < pageCount()) page++; init(); });
-        LibraryUi.button(this, "All Categories", width / 2 - 80, height - 34, 160, 22, b -> { selectedTag = "all"; page = 0; init(); });
+        LibraryUi.button(this::addDrawableChild, "‹ Previous", 14, height - 34, 105, 22, b -> { if (page > 0) page--; init(); });
+        LibraryUi.button(this::addDrawableChild, "Next ›", width - 119, height - 34, 105, 22, b -> { if (page + 1 < pageCount()) page++; init(); });
+        LibraryUi.button(this::addDrawableChild, "All Categories", width / 2 - 80, height - 34, 160, 22, b -> { selectedTag = "all"; page = 0; init(); });
     }
 
     private void layout() {

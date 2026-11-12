@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.compat.Compat;
+
 import com.yourname.floptext_rgb.screen.FlopTextRGBScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -18,14 +20,14 @@ public final class PresetSettingsScreen extends Screen {
         this.owner = owner;
     }
 
-    public static void open(Object owner) { Minecraft.getInstance().setScreen(new PresetSettingsScreen(owner)); }
+    public static void open(Object owner) { Compat.setScreen(new PresetSettingsScreen(owner)); }
 
     public static void drawTopButton(GuiGraphicsExtractor context, int mouseX, int mouseY) {
         FlopIcons.drawSettings(context, mouseX, mouseY);
     }
 
     public static boolean handleSettingsClick(FlopTextRGBScreen parent, MouseButtonEvent click) {
-        if (parent == null || click.button() != 0) return false;
+        if (parent == null || !Compat.isLeft(click.button())) return false;
         if (!FlopIcons.inside((int) click.x(), (int) click.y(), 18, 14, 24, 24)) return false;
         open(parent);
         return true;
@@ -83,7 +85,7 @@ public final class PresetSettingsScreen extends Screen {
     }
 
     @Override public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
-        if (click.button() != 0) return super.mouseClicked(click, doubled);
+        if (!Compat.isLeft(click.button())) return super.mouseClicked(click, doubled);
         int x = (int) click.x(), y = (int) click.y();
         int optionX = Math.max(24, (width - 340) / 2);
         int optionW = Math.min(340, width - 48);
@@ -116,6 +118,6 @@ public final class PresetSettingsScreen extends Screen {
         return mx >= x && my >= y && mx < x + w && my < y + h;
     }
 
-    private void goBack() { Minecraft.getInstance().setScreen(owner instanceof Screen screen ? screen : null); }
+    private void goBack() { Compat.setScreen(owner instanceof Screen screen ? screen : null); }
     @Override public void onClose() { goBack(); }
 }

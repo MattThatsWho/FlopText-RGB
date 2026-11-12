@@ -43,24 +43,24 @@ public final class PresetLibraryScreen extends Screen {
         int itemCount = FlopTextRGBConfig.get().presets.size() + PresetLibraryStore.data().folders.size() + 2;
         scrollMax = Math.max(0, 80 + itemCount * cardHeight - (viewportBottom - viewportTop));
         scroll = Math.max(0, Math.min(scroll, scrollMax));
-        LibraryUi.button(this, "Back", left, 14, 76, 22, b -> goBack());
-        LibraryUi.button(this, "Community", left + 84, 14, 110, 22,
+        LibraryUi.button(this::addDrawableChild, "Back", left, 14, 76, 22, b -> goBack());
+        LibraryUi.button(this::addDrawableChild, "Community", left + 84, 14, 110, 22,
             b -> MinecraftClient.getInstance().setScreen(new CommunityPresetScreen(this, mainScreen)));
-        LibraryUi.button(this, "Settings", right - 156, 14, 74, 22, b -> PresetSettingsScreen.open(this));
-        LibraryUi.button(this, "Open Preset Folder", right - 74, 14, 74, 22,
+        LibraryUi.button(this::addDrawableChild, "Settings", right - 156, 14, 74, 22, b -> PresetSettingsScreen.open(this));
+        LibraryUi.button(this::addDrawableChild, "Open Preset Folder", right - 74, 14, 74, 22,
             b -> setNotice(PresetFolderWorkflow.openPresetFolder() ? "Opened preset exchange folder." : "Open config/floptext_rgb/preset_files manually."));
         int toolGap = 8;
         int toolWidth = Math.max(68, (w - toolGap * 2) / 3);
-        LibraryUi.button(this, "Add Folder", left, 49, toolWidth, 22, b -> openAddFolder());
-        LibraryUi.button(this, "Import Favorites", left + toolWidth + toolGap, 49, toolWidth, 22,
+        LibraryUi.button(this::addDrawableChild, "Add Folder", left, 49, toolWidth, 22, b -> openAddFolder());
+        LibraryUi.button(this::addDrawableChild, "Import Favorites", left + toolWidth + toolGap, 49, toolWidth, 22,
             b -> PresetJsonTransfer.importJsonToFavoritesDialog(this));
-        LibraryUi.button(this, "Export Favorites", left + (toolWidth + toolGap) * 2, 49, toolWidth, 22,
+        LibraryUi.button(this::addDrawableChild, "Export Favorites", left + (toolWidth + toolGap) * 2, 49, toolWidth, 22,
             b -> PresetJsonTransfer.exportFavoritesDialog(this));
-        LibraryUi.button(this, "Import Folder JSON", left, 77, toolWidth, 22,
+        LibraryUi.button(this::addDrawableChild, "Import Folder JSON", left, 77, toolWidth, 22,
             b -> PresetJsonTransfer.importFolderDialog(this));
-        LibraryUi.button(this, "Import Folder ZIP", left + toolWidth + toolGap, 77, toolWidth, 22,
+        LibraryUi.button(this::addDrawableChild, "Import Folder ZIP", left + toolWidth + toolGap, 77, toolWidth, 22,
             b -> PresetFileBrowserScreen.openLegacyImport(this));
-        LibraryUi.button(this, "Save Current", left + (toolWidth + toolGap) * 2, 77, toolWidth, 22,
+        LibraryUi.button(this::addDrawableChild, "Save Current", left + (toolWidth + toolGap) * 2, 77, toolWidth, 22,
             b -> PresetDestinationScreen.openFromMain(mainScreen));
 
         int y = viewportTop + 5 - scroll;
@@ -85,9 +85,9 @@ public final class PresetLibraryScreen extends Screen {
             if (top < viewportTop || top + cardHeight > viewportBottom) continue;
             int deleteWidth = Math.min(58, Math.max(48, cardWidth / 3));
             int openWidth = Math.max(50, cardWidth - deleteWidth - 18);
-            LibraryUi.button(this, "Open: " + clip(folders.get(i).name, 18), x + 5, top + 5, openWidth, 22,
+            LibraryUi.button(this::addDrawableChild, "Open: " + clip(folders.get(i).name, 18), x + 5, top + 5, openWidth, 22,
                 b -> MinecraftClient.getInstance().setScreen(new PresetFolderScreen(this, index)));
-            LibraryUi.button(this, "Delete", x + cardWidth - deleteWidth - 5, top + 5, deleteWidth, 22,
+            LibraryUi.button(this::addDrawableChild, "Delete", x + cardWidth - deleteWidth - 5, top + 5, deleteWidth, 22,
                 b -> { deleteFolderPopup = index; init(); });
         }
         if (addFolderPopup) {
@@ -105,15 +105,15 @@ public final class PresetLibraryScreen extends Screen {
         int available = Math.max(30, w - 16);
         int gap = 5;
         int buttonW = Math.max(30, (available - gap * 2) / 3);
-        LibraryUi.button(this, "Load", x + 4, y + 30, buttonW, 20, b -> {
+        LibraryUi.button(this::addDrawableChild, "Load", x + 4, y + 30, buttonW, 20, b -> {
             mainScreen.applyPreset(preset);
             MinecraftClient.getInstance().setScreen(mainScreen);
         });
-        LibraryUi.button(this, "Delete", x + 4 + buttonW + gap, y + 30, buttonW, 20, b -> {
+        LibraryUi.button(this::addDrawableChild, "Delete", x + 4 + buttonW + gap, y + 30, buttonW, 20, b -> {
             List<GradientPreset> values = FlopTextRGBConfig.get().presets;
             if (index >= 0 && index < values.size()) { values.remove(index); FlopTextRGBConfig.save(); setNotice("Preset deleted."); init(); }
         });
-        LibraryUi.button(this, "Export", x + 4 + (buttonW + gap) * 2, y + 30, buttonW, 20,
+        LibraryUi.button(this::addDrawableChild, "Export", x + 4 + (buttonW + gap) * 2, y + 30, buttonW, 20,
             b -> PresetJsonTransfer.exportFavoritePresetDialog(this, index));
     }
 
@@ -122,19 +122,19 @@ public final class PresetLibraryScreen extends Screen {
         int w = Math.min(360, width - 24), x = (width - w) / 2, y = height / 2 - 64;
         folderNameField = new TextFieldWidget(textRenderer, x + 16, y + 43, w - 32, 20, Text.literal("Folder name"));
         folderNameField.setMaxLength(40); addDrawableChild(folderNameField);
-        LibraryUi.button(this, "Create", x + 30, y + 76, 100, 22, b -> {
+        LibraryUi.button(this::addDrawableChild, "Create", x + 30, y + 76, 100, 22, b -> {
             if (PresetLibraryStore.addFolder(folderNameField.getText())) { addFolderPopup = false; setNotice("Folder created."); init(); }
             else setNotice(PresetLibraryStore.status());
         });
-        LibraryUi.button(this, "Cancel", x + w - 130, y + 76, 100, 22, b -> { addFolderPopup = false; init(); });
+        LibraryUi.button(this::addDrawableChild, "Cancel", x + w - 130, y + 76, 100, 22, b -> { addFolderPopup = false; init(); });
     }
 
     private void buildDeleteConfirm() {
         int w = Math.min(370, width - 24), x = (width - w) / 2, y = height / 2 - 50;
-        LibraryUi.button(this, "Delete Folder", x + 15, y + 38, 145, 22, b -> {
+        LibraryUi.button(this::addDrawableChild, "Delete Folder", x + 15, y + 38, 145, 22, b -> {
             PresetLibraryStore.deleteFolder(deleteFolderPopup); deleteFolderPopup = -1; setNotice("Folder deleted."); init();
         });
-        LibraryUi.button(this, "Cancel Deletion", x + w - 160, y + 38, 145, 22, b -> { deleteFolderPopup = -1; init(); });
+        LibraryUi.button(this::addDrawableChild, "Cancel Deletion", x + w - 160, y + 38, 145, 22, b -> { deleteFolderPopup = -1; init(); });
     }
 
     @Override public void render(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -193,6 +193,6 @@ public final class PresetLibraryScreen extends Screen {
     private void goBack() { MinecraftClient.getInstance().setScreen(mainScreen); }
     static String clip(String s, int n) { if (s == null) return ""; return s.length() <= n ? s : s.substring(0, Math.max(0,n-1)) + "…"; }
     static int firstColor(GradientPreset preset) { return preset == null || preset.toStops().isEmpty() ? 0xFFFFFF : preset.toStops().get(0).rgb(); }
-    public void addTransferButton(String title,int x,int y,int w,int h,Runnable task) { LibraryUi.button(this,title,x,y,w,h,b -> task.run()); }
+    public void addTransferButton(String title,int x,int y,int w,int h,Runnable task) { LibraryUi.button(this::addDrawableChild,title,x,y,w,h,b -> task.run()); }
     public void installTransferButtons() { /* Controls are installed directly during init to avoid duplicate widgets. */ }
 }

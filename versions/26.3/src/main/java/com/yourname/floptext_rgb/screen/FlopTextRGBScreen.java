@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.screen;
 
+import com.yourname.floptext_rgb.compat.Compat;
+
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig;
 import com.yourname.floptext_rgb.compat.StyleBooleanBridge;
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig.GradientPreset;
@@ -280,7 +282,7 @@ public final class FlopTextRGBScreen extends Screen {
             addButton("Del", sidebarLeft + 15 + buttonWidth, y, buttonWidth, 18, b -> deletePreset(presetIndex));
         }
         addButton("", sidebarRight - 30, 14, 24, 24,
-            b -> Minecraft.getInstance().setScreen(new PresetLibraryScreen(this)));
+            b -> Compat.setScreen(new PresetLibraryScreen(this)));
         addButton("<", sidebarLeft + 6, bottomTop - 26, 22, 20, b -> changePage(-1));
         addButton(">", sidebarRight - 28, bottomTop - 26, 22, 20, b -> changePage(1));
     }
@@ -937,7 +939,7 @@ public final class FlopTextRGBScreen extends Screen {
     }
 
     private void openPicker() {
-        Minecraft.getInstance().setScreen(new ColorPickerScreen(this, this::setSelectedColor));
+        Compat.setScreen(new ColorPickerScreen(this, this::setSelectedColor));
     }
 
     public void setSelectedColor(int rgb) {
@@ -945,7 +947,7 @@ public final class FlopTextRGBScreen extends Screen {
         ColorStop old = stops.get(selectedStop);
         stops.set(selectedStop, new ColorStop(rgb & 0xFFFFFF, old.position()));
         syncHex(); updateOutput();
-        Minecraft.getInstance().setScreen(this);
+        Compat.setScreen(this);
     }
 
     private void removeSelectedStop() {
@@ -1052,14 +1054,14 @@ public final class FlopTextRGBScreen extends Screen {
         double mouseX = click.x(), mouseY = click.y();
         int button = click.button();
         if (colorPickerOpen) {
-            if (button == 0 && mouseX >= pickerSquareX && mouseX < pickerSquareX + pickerSquareWidth
+            if (Compat.isLeft(button) && mouseX >= pickerSquareX && mouseX < pickerSquareX + pickerSquareWidth
                     && mouseY >= pickerSquareY && mouseY < pickerSquareY + pickerSquareHeight) {
                 draggingColorSquare = true;
                 draggingHueSlider = false;
                 setPickerFromSquare(mouseX, mouseY);
                 return true;
             }
-            if (button == 0 && mouseX >= pickerHueX && mouseX < pickerHueX + pickerHueWidth
+            if (Compat.isLeft(button) && mouseX >= pickerHueX && mouseX < pickerHueX + pickerHueWidth
                     && mouseY >= pickerHueY && mouseY < pickerHueY + pickerHueHeight) {
                 draggingHueSlider = true;
                 draggingColorSquare = false;
@@ -1072,7 +1074,7 @@ public final class FlopTextRGBScreen extends Screen {
             return true; // Modal input never leaks through to the editor below.
         }
         if (!templatePopup && PresetSettingsScreen.handleSettingsClick(this, click)) return true;
-        if (!templatePopup && button == 0 && mouseX >= contentLeft + 8 && mouseX < contentLeft + 36
+        if (!templatePopup && Compat.isLeft(button) && mouseX >= contentLeft + 8 && mouseX < contentLeft + 36
                 && mouseY >= inputBottom - 28 && mouseY < inputBottom - 10) {
             openColorPicker();
             return true;
@@ -1081,7 +1083,7 @@ public final class FlopTextRGBScreen extends Screen {
             // The v1.21.11 checkbox toggles Custom output on/off. Keep its hitbox
             // aligned with the drawn control rather than using a guessed widget box.
             int boxX = 12, boxY = 92, boxW = Math.max(1, width - 24), boxH = 18;
-            if (button == 0 && mouseX >= boxX && mouseX < boxX + boxW
+            if (Compat.isLeft(button) && mouseX >= boxX && mouseX < boxX + boxW
                     && mouseY >= boxY && mouseY < boxY + boxH) {
                 outputFormat = "Custom".equals(outputFormat) ? "Legacy Hex" : "Custom";
                 updateTemplateFieldState();
@@ -1093,14 +1095,14 @@ public final class FlopTextRGBScreen extends Screen {
             if (!overPopup) return true;
         }
         int hit = handleAt(mouseX, mouseY);
-        if (button == 0 && hit >= 0) {
+        if (Compat.isLeft(button) && hit >= 0) {
             selectStop(hit);
             draggedStop = hit;
             draggedStopRef = stops.get(hit);
             draggedEndpoint = hit == 0 || hit == stops.size() - 1;
             return true;
         }
-        if (button == 0 && mouseY >= barScreenTop && mouseY <= barScreenBottom && mouseX >= barLeft && mouseX <= barRight) {
+        if (Compat.isLeft(button) && mouseY >= barScreenTop && mouseY <= barScreenBottom && mouseX >= barLeft && mouseX <= barRight) {
             addStop(xToPosition(mouseX)); return true;
         }
         return super.mouseClicked(click, doubled);
@@ -1110,7 +1112,7 @@ public final class FlopTextRGBScreen extends Screen {
     public boolean mouseDragged(MouseButtonEvent click, double deltaX, double deltaY) {
         double mouseX = click.x();
         double mouseY = click.y();
-        if (colorPickerOpen && click.button() == 0) {
+        if (colorPickerOpen && Compat.isLeft(click.button())) {
             if (draggingColorSquare) {
                 setPickerFromSquare(mouseX, mouseY);
                 return true;
@@ -1121,7 +1123,7 @@ public final class FlopTextRGBScreen extends Screen {
             }
             return super.mouseDragged(click, deltaX, deltaY);
         }
-        if (draggedStopRef != null && click.button() == 0) {
+        if (draggedStopRef != null && Compat.isLeft(click.button())) {
             if (draggedEndpoint) return true;
             int currentIndex = indexOfIdentity(draggedStopRef);
             if (currentIndex < 0) {

@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.screen;
 
+import com.yourname.floptext_rgb.compat.Compat;
+
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.yourname.floptext_rgb.math.GradientCalculator;
@@ -66,7 +68,8 @@ public final class ColorPickerScreen extends Screen {
     private void requestCapture() {
         try {
             Minecraft client = Minecraft.getInstance();
-            RenderTarget target = client.getMainRenderTarget();
+            RenderTarget target = Compat.mainRenderTarget();
+            if (target == null) { captureFailed = true; return; }
             Screenshot.takeScreenshot(target, image -> {
                 try {
                     int w = image.getWidth();
@@ -110,11 +113,11 @@ public final class ColorPickerScreen extends Screen {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
-        if (click.button() == 0) {
+        if (Compat.isLeft(click.button())) {
             int rgb = sample(click.x(), click.y());
             if (rgb >= 0) {
                 onPicked.accept(rgb);
-                Minecraft.getInstance().setScreen(parent);
+                Compat.setScreen(parent);
                 return true;
             }
         }
@@ -123,6 +126,6 @@ public final class ColorPickerScreen extends Screen {
 
     @Override
     public void onClose() {
-        Minecraft.getInstance().setScreen(parent);
+        Compat.setScreen(parent);
     }
 }

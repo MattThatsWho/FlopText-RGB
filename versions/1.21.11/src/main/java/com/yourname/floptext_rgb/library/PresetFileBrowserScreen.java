@@ -47,25 +47,25 @@ public final class PresetFileBrowserScreen extends Screen {
     @Override protected void init(){
         clearChildren();listBottom=height-105;listTop=94;
         if (width >= 540) {
-            LibraryUi.button(this,"Back",14,12,74,22,b->returnToOwner(""));
-            LibraryUi.button(this,"Up",96,12,54,22,b->goUp());
-            LibraryUi.button(this,"Refresh",156,12,72,22,b->refresh());
-            LibraryUi.button(this,"Open Preset Folder",234,12,138,22,b->{currentDir=home;refreshEntries();init();});
-            LibraryUi.button(this,"Settings",width-92,12,78,22,b->PresetSettingsScreen.open(this));
+            LibraryUi.button(this::addDrawableChild,"Back",14,12,74,22,b->returnToOwner(""));
+            LibraryUi.button(this::addDrawableChild,"Up",96,12,54,22,b->goUp());
+            LibraryUi.button(this::addDrawableChild,"Refresh",156,12,72,22,b->refresh());
+            LibraryUi.button(this::addDrawableChild,"Open Preset Folder",234,12,138,22,b->{currentDir=home;refreshEntries();init();});
+            LibraryUi.button(this::addDrawableChild,"Settings",width-92,12,78,22,b->PresetSettingsScreen.open(this));
         } else {
-            LibraryUi.button(this,"Back",14,12,60,22,b->returnToOwner(""));
-            LibraryUi.button(this,"Up",80,12,46,22,b->goUp());
-            LibraryUi.button(this,"Refresh",132,12,64,22,b->refresh());
-            LibraryUi.button(this,"Settings",width-78,12,64,22,b->PresetSettingsScreen.open(this));
-            LibraryUi.button(this,"Open Preset Folder",14,40,width-28,22,b->{currentDir=home;refreshEntries();init();});
+            LibraryUi.button(this::addDrawableChild,"Back",14,12,60,22,b->returnToOwner(""));
+            LibraryUi.button(this::addDrawableChild,"Up",80,12,46,22,b->goUp());
+            LibraryUi.button(this::addDrawableChild,"Refresh",132,12,64,22,b->refresh());
+            LibraryUi.button(this::addDrawableChild,"Settings",width-78,12,64,22,b->PresetSettingsScreen.open(this));
+            LibraryUi.button(this::addDrawableChild,"Open Preset Folder",14,40,width-28,22,b->{currentDir=home;refreshEntries();init();});
         }
         filenameField=new TextFieldWidget(textRenderer,14,height-78,width-190,20,Text.literal("File name"));filenameField.setMaxLength(120);filenameField.setText(defaultName);addDrawableChild(filenameField);
-        LibraryUi.button(this,saveMode?"Save Here":"Import Selected",width-166,height-78,152,20,b->{if(saveMode)doExport();else {Path selected=selectedPath();if(selected==null)setNotice("Select a JSON or ZIP file first.");else doImport(selected);}});
-        LibraryUi.button(this,"Cancel",width-92,height-48,78,20,b->returnToOwner(""));
-        LibraryUi.button(this,"Open Folder",14,height-48,104,20,b->{Path p=selectedPath();if(p!=null&&Files.isDirectory(p)){currentDir=p;refreshEntries();init();}else setNotice("Select a folder first.");});
+        LibraryUi.button(this::addDrawableChild,saveMode?"Save Here":"Import Selected",width-166,height-78,152,20,b->{if(saveMode)doExport();else {Path selected=selectedPath();if(selected==null)setNotice("Select a JSON or ZIP file first.");else doImport(selected);}});
+        LibraryUi.button(this::addDrawableChild,"Cancel",width-92,height-48,78,20,b->returnToOwner(""));
+        LibraryUi.button(this::addDrawableChild,"Open Folder",14,height-48,104,20,b->{Path p=selectedPath();if(p!=null&&Files.isDirectory(p)){currentDir=p;refreshEntries();init();}else setNotice("Select a folder first.");});
         refreshEntries();
         int maxRows=Math.max(0,(listBottom-listTop)/22);scrollMax=Math.max(0,entries.size()-maxRows);scroll=Math.max(0,Math.min(scroll,scrollMax));
-        int row=0;for(int i=scroll;i<Math.min(entries.size(),scroll+maxRows);i++){Path path=entries.get(i);final int index=i;String label=(Files.isDirectory(path)?"[Folder] ":"")+clip(path.getFileName().toString(),38);LibraryUi.button(this,label,18,listTop+row*22,width-36,20,b->{if(Files.isDirectory(path)){currentDir=path;scroll=0;refreshEntries();init();}else if(filenameField!=null){filenameField.setText(path.getFileName().toString());setNotice("Selected "+path.getFileName());}});row++;}
+        int row=0;for(int i=scroll;i<Math.min(entries.size(),scroll+maxRows);i++){Path path=entries.get(i);final int index=i;String label=(Files.isDirectory(path)?"[Folder] ":"")+clip(path.getFileName().toString(),38);LibraryUi.button(this::addDrawableChild,label,18,listTop+row*22,width-36,20,b->{if(Files.isDirectory(path)){currentDir=path;scroll=0;refreshEntries();init();}else if(filenameField!=null){filenameField.setText(path.getFileName().toString());setNotice("Selected "+path.getFileName());}});row++;}
     }
     public void refresh(){refreshEntries();init();}
     private void refreshEntries(){try{Files.createDirectories(currentDir);entries.clear();try(var stream=Files.list(currentDir)){entries.addAll(stream.filter(p->Files.isDirectory(p)||supported(p)).sorted(Comparator.comparing((Path p)->!Files.isDirectory(p)).thenComparing(p->p.getFileName().toString().toLowerCase(Locale.ROOT))).toList());}}catch(Exception e){setNotice("Could not read folder: "+msg(e));entries=new ArrayList<>();}}

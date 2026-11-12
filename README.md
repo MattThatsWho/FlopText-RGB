@@ -12,7 +12,7 @@ FlopText RGB is a **client-side Fabric mod** that lets you build multi-stop RGB 
 
 ## Features
 
-- **In-game gradient editor**: open it with the hotkey (**G** by default) or from Mod Menu.
+- **In-game gradient editor**: open it with the hotkey (**V** by default, rebindable in Controls) or from Mod Menu.
 - **Multi-stop gradients**: drag color stops along a rail and see the result live.
 - **HSV color selector**: click the selected stop's swatch for a hue/saturation/brightness picker with a live HEX field.
 - **Multiple output formats**: MiniMessage, JSON, plain hex strings and traditional section codes, plus a custom template.
@@ -29,7 +29,7 @@ FlopText RGB is a **client-side Fabric mod** that lets you build multi-stop RGB 
 
 Each version is a separate, self-contained Gradle project. They share no code.
 
-> **About 26.3:** the published 26.3 jar is the 26.1.2 build with only `fabric.mod.json` changed. It has not been compiled against 26.3 APIs or confirmed working in a 26.3 client. See [`docs/26.3/PORT_26.3_STATUS.md`](docs/26.3/PORT_26.3_STATUS.md).
+> **About 26.3:** the published 26.3 jar is the 26.1.2 build with only `fabric.mod.json` changed, and it has not been confirmed working in a 26.3 client. The 26.3 *source* in this repo has a small compatibility layer (`compat/Compat.java`) for 26.3's screen API and SDL input changes. It is untested in-game. See [`docs/26.3/PORT_26.3_STATUS.md`](docs/26.3/PORT_26.3_STATUS.md).
 
 ## Installing
 

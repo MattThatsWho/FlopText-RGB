@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.compat.Compat;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
@@ -25,7 +27,7 @@ final class LibraryUi {
     }
     static void divider(GuiGraphicsExtractor c, int x, int y, int w) { c.fill(x, y, x + w, y + 1, 0xFF454545); }
     static String safeFile(String value) { if (value == null) return "floptext-rgb"; return value.replaceAll("[^A-Za-z0-9._ -]", "_").trim(); }
-    static boolean fullyVisible(int x, int y, int w, int h) { Screen s = Minecraft.getInstance().screen; return s != null && x >= 0 && y >= 0 && x + w <= s.width && y + h <= s.height; }
+    static boolean fullyVisible(int x, int y, int w, int h) { Screen s = Compat.screen(); return s != null && x >= 0 && y >= 0 && x + w <= s.width && y + h <= s.height; }
     /** Pixel-perfect compact scrollbar used by the original Library screen.
      * Arguments after the viewport are scroll offset and maximum scroll amount.
      */

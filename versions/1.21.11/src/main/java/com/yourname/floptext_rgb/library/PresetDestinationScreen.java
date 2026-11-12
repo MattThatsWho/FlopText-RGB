@@ -35,14 +35,14 @@ public final class PresetDestinationScreen extends Screen {
         scrollMax=Math.max(0,20+PresetLibraryStore.data().folders.size()*30-(viewportBottom-viewportTop));scroll=Math.max(0,Math.min(scroll,scrollMax));
         nameField=new TextFieldWidget(textRenderer,modalX+16,modalY+50,modalW-32,20,Text.literal("Preset name"));
         nameField.setMaxLength(64);nameField.setText(pendingName);nameField.setChangedListener(v->pendingName=v);addDrawableChild(nameField);
-        LibraryUi.button(this,"Save to Favorites",modalX+16,viewportTop,modalW-32,22,b->saveTo(0));
+        LibraryUi.button(this::addDrawableChild,"Save to Favorites",modalX+16,viewportTop,modalW-32,22,b->saveTo(0));
         for(int i=0;i<PresetLibraryStore.data().folders.size();i++){
             final int folderIndex=i;
             int top=viewportTop+29+i*30-scroll;
             if (top < viewportTop || top + 22 > viewportBottom) continue;
-            LibraryUi.button(this,"Save to: "+PresetLibraryScreen.clip(PresetLibraryStore.data().folders.get(i).name,30),modalX+16,top,modalW-32,22,b->saveTo(folderIndex+1));
+            LibraryUi.button(this::addDrawableChild,"Save to: "+PresetLibraryScreen.clip(PresetLibraryStore.data().folders.get(i).name,30),modalX+16,top,modalW-32,22,b->saveTo(folderIndex+1));
         }
-        LibraryUi.button(this,"Cancel",modalX+modalW-104,modalY+modalH-31,88,20,b->cancel());
+        LibraryUi.button(this::addDrawableChild,"Cancel",modalX+modalW-104,modalY+modalH-31,88,20,b->cancel());
     }
     @Override public void render(DrawContext context,int mouseX,int mouseY,float delta){
         renderBackground(context,mouseX,mouseY,delta);context.fill(0,0,width,height,0x99000000);LibraryUi.panel(context,modalX,modalY,modalW,modalH);

@@ -47,21 +47,21 @@ public final class PresetSettingsScreen extends Screen {
         clearChildren();
         int w = Math.min(440, width - 24);
         int x = (width - w) / 2;
-        LibraryUi.button(this, "Back", x, 18, 78, 22, b -> goBack());
-        LibraryUi.button(this, "Use in-game file browser", x, 70, w, 24, b -> {
+        LibraryUi.button(this::addDrawableChild, "Back", x, 18, 78, 22, b -> goBack());
+        LibraryUi.button(this::addDrawableChild, "Use in-game file browser", x, 70, w, 24, b -> {
             PresetFilePickerSettings.setSystemPicker(false);
             notice("In-game file browser selected.");
         });
-        LibraryUi.button(this, "Open preset exchange folder", x, 108, w, 24, b -> {
+        LibraryUi.button(this::addDrawableChild, "Open preset exchange folder", x, 108, w, 24, b -> {
             notice(PresetFolderWorkflow.openPresetFolder()
                 ? "Opened config/floptext_rgb/preset_files."
                 : "Could not open automatically. Folder: config/floptext_rgb/preset_files");
         });
-        LibraryUi.button(this, "Refresh library data", x, 141, w, 24, b -> {
+        LibraryUi.button(this::addDrawableChild, "Refresh library data", x, 141, w, 24, b -> {
             PresetLibraryStore.reload();
             notice("Library data refreshed.");
         });
-        LibraryUi.button(this, "Open Community Presets", x, 174, w, 24, b -> {
+        LibraryUi.button(this::addDrawableChild, "Open Community Presets", x, 174, w, 24, b -> {
             if (owner instanceof PresetLibraryScreen library) {
                 MinecraftClient.getInstance().setScreen(new CommunityPresetScreen(library, library.getMainScreen()));
             } else {
