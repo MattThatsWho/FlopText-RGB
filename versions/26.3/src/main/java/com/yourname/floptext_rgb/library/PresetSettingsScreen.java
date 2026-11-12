@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.ui.FlopTheme;
+
 import com.yourname.floptext_rgb.compat.Compat;
 
 import com.yourname.floptext_rgb.screen.FlopTextRGBScreen;
@@ -36,13 +38,13 @@ public final class PresetSettingsScreen extends Screen {
     @Override protected void init() { clearWidgets(); }
 
     @Override public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
-        context.fill(0, 0, width, height, 0xD0080B10);
+        context.fill(0, 0, width, height, 0xD0080808);
         LibraryUi.panel(context, 8, 8, width - 16, height - 16);
         context.text(font, Component.literal("FlopText RGB Settings"), 22, 18, -1);
         context.text(font, Component.literal("Choose how preset files are opened and saved"),
-            22, 39, 0xFFB7C3D2);
+            22, 39, 0xFFA9AFB8);
         LibraryUi.divider(context, 22, 57, width - 44);
-        context.text(font, Component.literal("File picker"), 24, 78, 0xFF7DE3F3);
+        context.text(font, Component.literal("File picker"), 24, 78, 0xFF7AA7FF);
 
         int optionX = Math.max(24, (width - 340) / 2);
         int optionW = Math.min(340, width - 48);
@@ -52,9 +54,9 @@ public final class PresetSettingsScreen extends Screen {
         drawOption(context, optionX, 165, optionW, 38,
             "Minecraft-style preset folder (Secondary)", "Use the in-game file browser instead", !system, mouseX, mouseY);
         context.text(font, Component.literal("Default: your PC's native file picker."),
-            24, 223, 0xFFB7C3D2);
+            24, 223, 0xFFA9AFB8);
         context.text(font, Component.literal("Choose the in-game browser above to keep file navigation inside Minecraft."),
-            24, 239, 0xFFB7C3D2);
+            24, 239, 0xFFA9AFB8);
         if (statusTicks > 0 && !status.isBlank()) {
             context.text(font, Component.literal(status), 24, height - 65,
                 status.startsWith("Error") ? 0xFFFF7777 : 0xFF70E090);
@@ -69,19 +71,18 @@ public final class PresetSettingsScreen extends Screen {
         boolean hover = inside(mouseX, mouseY, x, y, w, h);
         LibraryUi.panel(context, x, y, w, h);
         context.fill(x + 1, y + 1, x + w - 1, y + h - 1,
-            selected ? 0xFF244D58 : hover ? 0xFF303C46 : 0xFF1B242C);
+            selected ? 0xFF2B3A55 : hover ? 0xFF2A2E35 : 0xFF1C1F24);
+        if (selected) context.fill(x + 1, y + 1, x + 4, y + h - 1, 0xFF7AA7FF);
         context.text(font, Component.literal(title + (selected ? "  [Selected]" : "")), x + 12, y + 6,
-            selected ? 0xFF7DE3F3 : -1);
-        context.text(font, Component.literal(subtitle), x + 12, y + 21, 0xFFB7C3D2);
+            selected ? 0xFF7AA7FF : -1);
+        context.text(font, Component.literal(subtitle), x + 12, y + 21, 0xFFA9AFB8);
     }
 
     private void drawButton(GuiGraphicsExtractor context, int x, int y, int w, int h,
                             String title, int mouseX, int mouseY) {
         boolean hover = inside(mouseX, mouseY, x, y, w, h);
-        LibraryUi.panel(context, x, y, w, h);
-        context.fill(x + 1, y + 1, x + w - 1, y + h - 1, hover ? 0xFF354A55 : 0xFF202B34);
-        int tx = x + (w - font.width(title)) / 2;
-        context.text(font, Component.literal(title), tx, y + (h - 8) / 2, -1);
+        FlopTheme.button(context, font, x, y, w, h, Component.literal(title), FlopTheme.kindFor(title),
+            hover, true, false);
     }
 
     @Override public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {

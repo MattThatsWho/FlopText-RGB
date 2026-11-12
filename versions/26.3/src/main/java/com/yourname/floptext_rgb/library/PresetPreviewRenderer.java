@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.ui.FlopTheme;
+
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig.GradientPreset;
 import com.yourname.floptext_rgb.math.GradientCalculator;
 import net.minecraft.client.gui.Font;
@@ -20,6 +22,7 @@ public final class PresetPreviewRenderer {
         if (chars.length == 0) return;
         List<GradientCalculator.ColorStop> stops = preset == null ? List.of()
             : GradientCalculator.sorted(preset.toStops());
+        if (FlopTheme.isDark(stops)) FlopTheme.previewStrip(context, x - 4, y - 3, x + Math.max(0, maxWidth) + 4, y + 11);
         int cursorX = x;
         int limitX = x + Math.max(0, maxWidth);
         for (int i = 0; i < chars.length; i++) {

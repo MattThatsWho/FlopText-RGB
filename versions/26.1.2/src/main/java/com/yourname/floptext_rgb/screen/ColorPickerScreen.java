@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.screen;
 
+import com.yourname.floptext_rgb.ui.FlopTheme;
+
 import com.yourname.floptext_rgb.compat.Compat;
 
 import com.mojang.blaze3d.platform.NativeImage;
@@ -41,6 +43,7 @@ public final class ColorPickerScreen extends Screen {
             requestCapture();
         }
         super.extractRenderState(context, mouseX, mouseY, delta);
+        FlopTheme.paintButtons(context, font, this, mouseX, mouseY);
 
         String hint = captureFailed
             ? "Screen capture failed - press Esc"

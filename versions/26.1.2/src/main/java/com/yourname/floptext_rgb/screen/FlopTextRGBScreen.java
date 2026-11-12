@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.screen;
 
+import com.yourname.floptext_rgb.ui.FlopTheme;
+
 import com.yourname.floptext_rgb.compat.Compat;
 
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig;
@@ -229,12 +231,12 @@ public final class FlopTextRGBScreen extends Screen {
             // inside the old panel rather than allowing the old fixed widths to overlap.
             addButton("Pick", contentLeft + 124, controlY, 43, 18, b -> openPicker());
             addButton("Apply", contentLeft + 171, controlY, 43, 18, b -> applyHex());
-            addButton("Remove", contentLeft + 218, controlY, Math.max(42, contentRight - (contentLeft + 218) - 2), 18,
+            addButton("Remove", contentLeft + 218, controlY, Math.max(42, contentRight - (contentLeft + 218) - 10), 18,
                 b -> removeSelectedStop());
         } else {
             addButton("In-Game Hex Picker", contentLeft + 124, controlY, 112, 18, b -> openPicker());
-            addButton("Apply Hex", contentLeft + 240, controlY, 70, 18, b -> applyHex());
-            addButton("Remove Color", contentRight - 94, controlY, 88, 18, b -> removeSelectedStop());
+            addButton("Apply Hex", contentLeft + 242, controlY, 70, 18, b -> applyHex());
+            addButton("Remove Color", contentRight - 98, controlY, 88, 18, b -> removeSelectedStop());
         }
 
         int outputButtonY = outputTop + 4;
@@ -244,15 +246,15 @@ public final class FlopTextRGBScreen extends Screen {
             addButton(formatLabel, contentLeft + 48, outputButtonY, 72, 18, b -> cycleFormat());
             addButton("Copy", contentLeft + 124, outputButtonY, 70, 18, b -> copyOutput());
             Button customButton = addButton("Custom Output", contentLeft + 198, outputButtonY,
-                Math.max(76, contentRight - (contentLeft + 198) - 4), 18, b -> openTemplatePopup());
+                Math.max(76, contentRight - (contentLeft + 198) - 10), 18, b -> openTemplatePopup());
             customButton.active = false; // Keep disabled even when Format is Custom; popup is not ready.
         } else {
-            addButton(formatLabel, contentRight - 370, outputButtonY, 126, 18, b -> cycleFormat());
-            addButton("Copy To Clipboard", contentRight - 232, outputButtonY, 112, 18, b -> copyOutput());
+            addButton(formatLabel, contentRight - 360, outputButtonY, 126, 18, b -> cycleFormat());
+            addButton("Copy To Clipboard", contentRight - 228, outputButtonY, 112, 18, b -> copyOutput());
             Button customButton = addButton("Custom Output", contentRight - 110, outputButtonY, 100, 18, b -> openTemplatePopup());
             customButton.active = false; // Keep disabled even when Format is Custom; popup is not ready.
         }
-        addButton("Save Preset", contentRight - 82, outputBottom - 24, 76, 18, b -> savePreset());
+        addButton("Save Preset", contentRight - 86, outputBottom - 24, 76, 18, b -> savePreset());
         addButton("Close FlopText RGB", width / 2 - 90, bottomTop + 15, 180, 20, b -> closeScreen());
     }
 
@@ -303,6 +305,7 @@ public final class FlopTextRGBScreen extends Screen {
             context.fill(0, 0, width, height, 0xD9000000);
             drawColorPicker(context, mouseX, mouseY);
             super.extractRenderState(context, mouseX, mouseY, delta);
+            FlopTheme.paintButtons(context, font, this, mouseX, mouseY);
             return;
         }
         drawPanel(context, contentLeft, 8, contentRight - contentLeft, bottomTop - 8);
@@ -314,17 +317,18 @@ public final class FlopTextRGBScreen extends Screen {
         drawPresetCardBackgrounds(context);
         context.disableScissor();
         super.extractRenderState(context, mouseX, mouseY, delta);
+        FlopTheme.paintButtons(context, font, this, mouseX, mouseY, this::isStyleToggleOn);
 
-        context.centeredText(font, Component.literal("FlopText RGB"), width / 2, 16, WHITE);
-        context.centeredText(font, Component.literal("Client-side RGB text gradient creator"), width / 2, 34, GRAY);
+        context.centeredText(font, Component.literal("FlopText RGB"), (contentLeft + contentRight) / 2, 16, WHITE);
+        context.centeredText(font, Component.literal("Client-side RGB text gradient creator"), (contentLeft + contentRight) / 2, 34, GRAY);
         // The gear is a dedicated pixel-art control at the top-left, as in v1.7.0.
         PresetSettingsScreen.drawTopButton(context, mouseX, mouseY);
         FlopIcons.drawLibrary(context, sidebarRight - 30, 14, mouseX, mouseY);
 
         context.enableScissor(8, 44, sidebarLeft - 4, bottomTop - 8);
         drawLabel(context, "Preview", contentLeft + 8, previewTop + 7);
-        drawInset(context, contentLeft + 8, previewTop + 22, contentRight - 8, previewBottom - 6);
-        drawPreview(context, contentLeft + 14, previewTop + 38);
+        drawInset(context, contentLeft + 8, previewTop + 22, contentRight - 8, previewBottom - 6, previewFill());
+        drawPreview(context, contentLeft + 14, previewTop + 31);
 
         drawLabel(context, "Input", contentLeft + 8, inputTop + 7);
         drawGradientBar(context);
@@ -455,8 +459,11 @@ public final class FlopTextRGBScreen extends Screen {
     }
 
     private void drawGradientBar(GuiGraphicsExtractor ctx) {
-        barLeft = contentLeft + 8;
-        barRight = contentRight - 8;
+        // Line the bar up with the text fields above it, inset so the end knobs stay inside the panel.
+        int fieldLeft = inputField != null ? inputField.getX() : contentLeft + 6;
+        int fieldRight = inputField != null ? inputField.getX() + inputField.getWidth() : contentRight - 10;
+        barLeft = fieldLeft + 8;
+        barRight = fieldRight - 8;
         int y0 = barTop;
         barScreenTop = y0;
         barScreenBottom = y0 + 12;
@@ -515,8 +522,20 @@ public final class FlopTextRGBScreen extends Screen {
         ctx.text(font, Component.literal(label), lx, barScreenTop + 18, GRAY, false);
     }
 
-    private void drawInset(GuiGraphicsExtractor ctx, int x1, int y1, int x2, int y2) {
-        ctx.fill(x1, y1, x2, y2, 0xAA000000);
+    /** Black preview box normally; a lighter one when the typed text uses a very dark gradient. */
+    private int previewFill() {
+        return !inputText.isEmpty() && FlopTheme.isDark(stops) ? FlopTheme.PREVIEW_CHIP : 0xAA000000;
+    }
+
+    /** Which of the [B] [I] [S] [U] style buttons are currently switched on. */
+    private boolean isStyleToggleOn(Button button) {
+        String label = button.getMessage().getString();
+        return (label.equals("[B]") && bold) || (label.equals("[I]") && italic)
+            || (label.equals("[S]") && strikethrough) || (label.equals("[U]") && underline);
+    }
+
+    private void drawInset(GuiGraphicsExtractor ctx, int x1, int y1, int x2, int y2, int fill) {
+        ctx.fill(x1, y1, x2, y2, fill);
         ctx.fill(x1, y1, x2, y1 + 1, PANEL_EDGE);
         ctx.fill(x1, y2 - 1, x2, y2, PANEL_EDGE);
         ctx.fill(x1, y1, x1 + 1, y2, PANEL_EDGE);
@@ -585,14 +604,14 @@ public final class FlopTextRGBScreen extends Screen {
         context.enableScissor(sidebarLeft + 2, 44, sidebarRight - 2, bottomTop - 48);
         drawPresetCardBackgrounds(context);
         context.disableScissor();
-        context.centeredText(font, Component.literal("FlopText RGB"), width / 2, 16, WHITE);
-        context.centeredText(font, Component.literal("Client-side RGB text gradient creator"), width / 2, 34, GRAY);
+        context.centeredText(font, Component.literal("FlopText RGB"), (contentLeft + contentRight) / 2, 16, WHITE);
+        context.centeredText(font, Component.literal("Client-side RGB text gradient creator"), (contentLeft + contentRight) / 2, 34, GRAY);
         PresetSettingsScreen.drawTopButton(context, mouseX, mouseY);
         FlopIcons.drawLibrary(context, sidebarRight - 30, 14, mouseX, mouseY);
         context.enableScissor(8, 44, sidebarLeft - 4, bottomTop - 8);
         drawLabel(context, "Preview", contentLeft + 8, previewTop + 7);
-        drawInset(context, contentLeft + 8, previewTop + 22, contentRight - 8, previewBottom - 6);
-        drawPreview(context, contentLeft + 14, previewTop + 38);
+        drawInset(context, contentLeft + 8, previewTop + 22, contentRight - 8, previewBottom - 6, previewFill());
+        drawPreview(context, contentLeft + 14, previewTop + 31);
         drawLabel(context, "Input", contentLeft + 8, inputTop + 7);
         drawGradientBar(context);
         drawStopHandles(context, mouseX, mouseY);
@@ -823,6 +842,7 @@ public final class FlopTextRGBScreen extends Screen {
         if (chars.length == 0) chars = "Preview".codePoints().toArray();
         int px = x;
         List<ColorStop> presetStops = preset.toStops();
+        if (FlopTheme.isDark(presetStops)) FlopTheme.previewStrip(ctx, x - 4, y - 3, x + maxW + 4, y + 11);
         for (int i = 0; i < chars.length; i++) {
             String ch = new String(Character.toChars(chars[i]));
             int color = GradientCalculator.colorAt(presetStops, GradientCalculator.charPosition(i, chars.length));

@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.ui.FlopTheme;
+
 import com.yourname.floptext_rgb.compat.Compat;
 
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig;
@@ -266,6 +268,7 @@ public final class PresetLibraryScreen extends Screen {
             }
         }
         super.extractRenderState(context, mouseX, mouseY, delta);
+        FlopTheme.paintButtons(context, font, this, mouseX, mouseY);
         // Draw the pixel-person icon after the widget, so its silhouette isn't covered.
         if (!isModalOpen()) CommunityPresetScreen.drawLibraryEntry(this, context, mouseX, mouseY);
     }

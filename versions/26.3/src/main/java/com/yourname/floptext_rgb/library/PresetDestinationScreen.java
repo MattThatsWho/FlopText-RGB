@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.ui.FlopTheme;
+
 import com.yourname.floptext_rgb.compat.Compat;
 
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig;
@@ -49,12 +51,13 @@ public final class PresetDestinationScreen extends Screen {
     @Override public void extractRenderState(GuiGraphicsExtractor context,int mouseX,int mouseY,float delta){
         context.fill(0,0,width,height,0x99000000);LibraryUi.panel(context,modalX,modalY,modalW,modalH);
         context.centeredText(font,Component.literal("Save Preset"),width/2,modalY+12,0xFFF2F5FF);
-        context.text(font,Component.literal("Choose a name and destination."),modalX+16,modalY+31,0xFF9BA9C0);
-        context.text(font,Component.literal("Preview"),modalX+16,modalY+76,0xFF9BA9C0);
+        context.text(font,Component.literal("Choose a name and destination."),modalX+16,modalY+31,0xFFA9AFB8);
+        context.text(font,Component.literal("Preview"),modalX+16,modalY+76,0xFFA9AFB8);
         PresetPreviewRenderer.draw(context, font, "", modalX+72, modalY+76,
             mainScreen.snapshotCurrentPreset("Preview"), modalW-88);
         if(!notice.isEmpty())context.centeredText(font,Component.literal(notice),width/2,modalY+modalH-52,0xFFFF8A8A);
         super.extractRenderState(context,mouseX,mouseY,delta);
+        FlopTheme.paintButtons(context, font, this, mouseX, mouseY);
     }
     private void saveTo(int destination){
         String name=nameField==null?pendingName:nameField.getValue().trim();

@@ -5,6 +5,10 @@ Full per-version notes live in [`docs/`](docs). Versions are listed newest first
 ## 1.9.0 (Minecraft 26.1.2, 26.2, 26.3)
 - New gradient bar and stop markers: framed full-height bar, thin stems with color knobs below it instead of squares covering the gradient, larger accent-ringed selected stop, hover highlight, and the selected stop's position shown in percent.
 - Larger, easier-to-grab stop hit area. Bordered preview box and evenly framed color swatch.
+- One shared look across every screen: a single flat button style (confirm actions blue, destructive actions red, disabled buttons dimmed), and the Community Presets and Settings screens now use the same neutral colors as the editor and Library.
+- [B] [I] [S] [U] now light up when a style is switched on.
+- Alignment fixes: title centered over the editor panel, preview text vertically centered, gradient bar lined up with the text fields (end knobs no longer clip), and every button row ends on the same edge with even gaps.
+- Very dark gradients (for example Netherite) now get a light backdrop in previews and preset cards so they stay readable.
 - Added Minecraft 26.2 support (new, untested).
 - One shared source for 26.1.2 / 26.2 / 26.3 with a small per-version `Compat` adapter.
 - Jar files are now named `floptext-rgb-<version>-<minecraft>.jar`.

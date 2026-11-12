@@ -7,4 +7,6 @@ Status: In Testing. First 26.2 build, made from the shared 26.1.2/26.3 source wi
 - New stop markers look right: stem, knob, percentage label, hover highlight.
 - Screenshot picker (uses a type-based framebuffer lookup on 26.2), clipboard copy, PC file picker.
 - Library, Favorites, folders, Community Presets, JSON/ZIP import and export, config persistence.
+- All buttons use the new flat style on every screen (editor, Library, folders, Save Preset, import/export, Community, Settings); [B] [I] [S] [U] light up when on.
+- Check at GUI scale 2 and at GUI scale 4 (compact layout): no overlapping buttons, rows end on the same edge.
 - Save the full latest.log and any crash report if something fails.

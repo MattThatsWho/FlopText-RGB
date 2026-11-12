@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.ui.FlopTheme;
+
 import com.yourname.floptext_rgb.compat.Compat;
 
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig.GradientPreset;
@@ -261,6 +263,7 @@ public final class PresetFolderScreen extends Screen {
             }
         }
         super.extractRenderState(context, mouseX, mouseY, delta);
+        FlopTheme.paintButtons(context, font, this, mouseX, mouseY);
     }
 
     @Override

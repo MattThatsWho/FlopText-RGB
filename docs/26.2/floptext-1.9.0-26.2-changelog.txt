@@ -10,6 +10,10 @@ Reason: New Minecraft version, in testing
 - Stop markers are now a thin stem through the bar plus a color knob underneath, instead of a square that covered the gradient. The selected stop is larger with an accent ring, stops highlight when hovered, and the selected stop's position is shown as a percentage.
 - Easier to grab: the stop hit area now covers the stem and knob.
 - Preview box now has a border, and the selected-color swatch has an even frame.
+- One shared look across every screen: a single flat button style (confirm actions blue, destructive actions red, disabled buttons dimmed). Community Presets and Settings now use the same neutral colors as the editor and Library.
+- [B] [I] [S] [U] now light up when a style is switched on.
+- Alignment: title centered over the editor panel, preview text vertically centered, gradient bar lined up with the text fields (end knobs no longer clip), and each button row ends on the same edge with even gaps.
+- Very dark gradients now get a light backdrop in the preview box and preset cards so they stay readable.
 - Jar is named floptext-rgb-1.9.0-26.2.jar.
 
 ### Changed:

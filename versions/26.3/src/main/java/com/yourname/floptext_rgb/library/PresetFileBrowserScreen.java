@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.ui.FlopTheme;
+
 import com.yourname.floptext_rgb.compat.Compat;
 
 import com.yourname.floptext_rgb.config.FlopTextRGBConfig;
@@ -85,7 +87,7 @@ public final class PresetFileBrowserScreen extends Screen {
     private String getDefaultName(){return switch(mode){case EXPORT_FAVORITES_JSON->"favorites.json";case EXPORT_FOLDER_JSON->safeName(folderName())+".json";case EXPORT_FAVORITE_PRESET_JSON,EXPORT_FOLDER_PRESET_JSON->"preset.json";case LEGACY_ZIP_EXPORT->safeName(folderName())+".zip";default->"";};}
     /** Toolbar controls are constructed directly in init(); this hook intentionally adds no duplicates. */
     public void installConvenienceButtons() { /* See init(): all toolbar buttons are already installed there. */ }
-    @Override public void extractRenderState(GuiGraphicsExtractor c,int mx,int my,float delta){LibraryUi.panel(c,10,8,width-20,height-16);c.centeredText(font,Component.literal(saveMode?"Export FlopText RGB":"Import FlopText RGB"),width/2,40,0xFFF2F5FF);c.text(font,Component.literal("Folder: "+clip(currentDir.toString(),Math.max(20,(width-40)/6))),18,68,0xFF9BA9C0);c.text(font,Component.literal("JSON exchange folder: config/floptext_rgb/preset_files/"),18,height-94,0xFF9BA9C0);if(statusTicks>0){c.centeredText(font,Component.literal(status),width/2,height-25,0xFF70D6A5);statusTicks--;}super.extractRenderState(c,mx,my,delta);}
+    @Override public void extractRenderState(GuiGraphicsExtractor c,int mx,int my,float delta){LibraryUi.panel(c,10,8,width-20,height-16);c.centeredText(font,Component.literal(saveMode?"Export FlopText RGB":"Import FlopText RGB"),width/2,40,0xFFF2F5FF);c.text(font,Component.literal("Folder: "+clip(currentDir.toString(),Math.max(20,(width-40)/6))),18,68,0xFFA9AFB8);c.text(font,Component.literal("JSON exchange folder: config/floptext_rgb/preset_files/"),18,height-94,0xFFA9AFB8);if(statusTicks>0){c.centeredText(font,Component.literal(status),width/2,height-25,0xFF70D6A5);statusTicks--;}super.extractRenderState(c,mx,my,delta);FlopTheme.paintButtons(c,font,this,mx,my);}
     @Override public boolean mouseScrolled(double x,double y,double horizontal,double vertical){if(y>=listTop&&y<=listBottom){scroll=Math.max(0,Math.min(scrollMax,scroll-(int)Math.signum(vertical)*2));init();return true;}return super.mouseScrolled(x,y,horizontal,vertical);}
     @Override public void onClose(){returnToOwner("");}
     private void goUp(){Path parent=currentDir.getParent();if(parent!=null&&parent.startsWith(home.getParent())){currentDir=parent;scroll=0;refreshEntries();init();}}

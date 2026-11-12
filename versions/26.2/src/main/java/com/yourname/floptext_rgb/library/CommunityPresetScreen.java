@@ -1,5 +1,7 @@
 package com.yourname.floptext_rgb.library;
 
+import com.yourname.floptext_rgb.ui.FlopTheme;
+
 import com.yourname.floptext_rgb.compat.Compat;
 
 import com.yourname.floptext_rgb.screen.FlopTextRGBScreen;
@@ -21,15 +23,15 @@ import java.util.Locale;
  */
 public final class CommunityPresetScreen extends Screen {
     private static final int WHITE = 0xFFFFFFFF;
-    private static final int TITLE = 0xFFBEEBFA;
-    private static final int MUTED = 0xFF9BA7B4;
-    private static final int PANEL = 0xD51A2028;
-    private static final int PANEL_EDGE = 0xFF34424E;
-    private static final int INPUT = 0xFF14191F;
+    private static final int TITLE = 0xFFFFFFFF;
+    private static final int MUTED = 0xFFA9AFB8;
+    private static final int PANEL = 0xD0101010;
+    private static final int PANEL_EDGE = 0xFF454545;
+    private static final int INPUT = 0xFF0B0B0B;
     private static final int BUTTON = 0xFF354552;
     private static final int BUTTON_EDGE = 0xFF34424E;
     private static final int SELECTED = 0xFF246783;
-    private static final int TAG_TEXT = 0xFF53B6D8;
+    private static final int TAG_TEXT = 0xFF7AA7FF;
     private static final int CARD_HEIGHT = 72;
 
     private static final String[] TAGS = {
@@ -194,7 +196,7 @@ public final class CommunityPresetScreen extends Screen {
         panel(context, 12, 10, width - 24, 66, PANEL, PANEL_EDGE);
         centered(context, "COMMUNITY PRESETS", 20, TITLE);
         centered(context, filtered().size() + " presets", 35, MUTED);
-        panel(context, 14, 44, width - 28, 29, 0xE51F2832, PANEL_EDGE);
+        panel(context, 14, 44, width - 28, 29, 0xE5141414, PANEL_EDGE);
         panel(context, 18, 48, fieldWidth(), 20, INPUT, PANEL_EDGE);
         super.extractRenderState(context, mouseX, mouseY, delta);
 
@@ -216,7 +218,7 @@ public final class CommunityPresetScreen extends Screen {
             if (card.y + card.h < contentTop || card.y > contentBottom) continue;
             boolean hover = inside(mouseX, mouseY, card.x, card.y, card.w, card.h);
             panel(context, card.x, card.y, card.w, card.h,
-                hover ? 0xE82A343D : PANEL, PANEL_EDGE);
+                hover ? 0xE8262A30 : PANEL, PANEL_EDGE);
             text(context, clip(card.preset.name, Math.max(10, card.w / 6)), card.x + 7, card.y + 6, WHITE);
             String previewText = card.preset.inputText == null || card.preset.inputText.isBlank()
                 ? "Example Text" : card.preset.inputText;
@@ -232,7 +234,7 @@ public final class CommunityPresetScreen extends Screen {
         // Card tags are drawn and hit-tested from the same layout rectangles.
         for (TagHit tag : visibleCardTags) {
             boolean hover = inside(mouseX, mouseY, tag.x, tag.y, tag.w, tag.h);
-            text(context, tag.label, tag.x, tag.y + 2, hover ? 0xFFECEFF4 : 0xFF53B6D8);
+            text(context, tag.label, tag.x, tag.y + 2, hover ? 0xFFECEFF4 : 0xFF7AA7FF);
         }
         // Compact Load button lives inside each 72px card, as in the original page.
         for (CardHit card : visibleCards) {
@@ -270,15 +272,10 @@ public final class CommunityPresetScreen extends Screen {
 
     private void drawButton(GuiGraphicsExtractor c, int x, int y, int w, int h, String label,
                             int fill, int text, int mx, int my, boolean selected) {
+        // fill/text are kept for the existing call sites; the shared FlopTheme decides the look.
         boolean hover = inside(mx, my, x, y, w, h);
-        LibraryUi.panel(c, x, y, w, h);
-        int base = hover ? lighten(fill, 14) : fill;
-        c.fill(x + 1, y + 1, x + w - 1, y + h - 1, base);
-        c.fill(x + 1, y + 1, x + w - 1, y + 2, lighten(base, 22));
-        c.fill(x + 1, y + h - 2, x + w - 1, y + h - 1, darken(base, 26));
-        if (selected) c.fill(x + 1, y + h - 3, x + w - 1, y + h - 2, 0xFF53B6D8);
-        c.centeredText(font, Component.literal(label), x + w / 2, y + (h - 8) / 2,
-            hover ? WHITE : text);
+        FlopTheme.button(c, font, x, y, w, h, Component.literal(label), FlopTheme.kindFor(label),
+            hover, true, selected);
     }
 
     private static int lighten(int color, int amount) {

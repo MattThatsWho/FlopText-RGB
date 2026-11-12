@@ -16,6 +16,7 @@ FlopText RGB is a **client-side Fabric mod** that lets you build multi-stop RGB 
 - **Multi-stop gradients**: drag color stops along a rail and see the result live.
 - **HSV color selector**: click the selected stop's swatch for a hue/saturation/brightness picker with a live HEX field.
 - **Polished gradient bar**: thin stop markers with color knobs sit under the bar so the whole gradient stays visible, and the selected stop shows its position in percent.
+- **One consistent look**: every screen (editor, Library, Community Presets, Settings, dialogs) shares the same flat button style and colors, with confirm actions in blue, destructive ones in red, and active style toggles ([B] [I] [S] [U]) lit up.
 - **Multiple output formats**: MiniMessage, JSON, plain hex strings and traditional section codes, plus a custom template.
 - **Better Presets**: Favorites, custom folders, a preset library, and JSON import/export with a built-in file browser.
 - **Community Presets**: a built-in catalogue of 431 gradient presets across 16 categories, including 135 mob gradients and 23 seasonal/holiday ones.
