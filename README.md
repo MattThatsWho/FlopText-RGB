@@ -55,7 +55,9 @@ The jar appears in `build/libs/`. No Gradle wrapper is included, so use an insta
 
 ## ⚠️ Source status (please read)
 
-The Java code in this repository was **reconstructed from compiled jars**. It is not the original authoring source, and it is not guaranteed to match the released jars line-for-line. The released 26.1.2 jars were produced by patching compiled classes, and the source in this repo has not been confirmed to compile against the official Minecraft/Fabric dependencies. The GitHub Actions run is the real compile test, and the 26.3 and 1.21.11 builds are allowed to fail. Hopefully it helps as a reference, a starting point or something to fork.
+The Java code in this repository was **reconstructed from compiled jars**. It is not the original authoring source, and it is not guaranteed to match the released jars line-for-line. The released 26.1.2 jars were produced by patching compiled classes.
+
+The 26.1.2 source **does compile** against the official Minecraft/Fabric dependencies in GitHub Actions, but a jar built from it has not been tested in-game. The 26.3 and 1.21.11 builds are allowed to fail while they're being sorted out. Hopefully this helps as a reference, a starting point or something to fork.
 
 The jars on Modrinth and the website are the authoritative releases.
 

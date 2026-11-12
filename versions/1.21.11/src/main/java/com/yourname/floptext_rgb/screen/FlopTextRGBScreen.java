@@ -86,6 +86,15 @@ public final class FlopTextRGBScreen extends Screen {
         FlopTextRGBConfig.save();
     }
 
+    private void cycleFormat() {
+        int index = OUTPUT_FORMATS.indexOf(outputFormat);
+        if (index < 0) index = 0;
+        outputFormat = OUTPUT_FORMATS.get((index + 1) % OUTPUT_FORMATS.size());
+        updateOutput();
+        saveUiConfig();
+        init();
+    }
+
     private void loadDefaultStopsIfNeeded() {
         if (stops.isEmpty()) {
             stops.add(new ColorStop(0xFF3D9A, 0f));
